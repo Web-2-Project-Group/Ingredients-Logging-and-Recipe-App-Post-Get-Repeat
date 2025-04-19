@@ -1,4 +1,7 @@
 from flask import Blueprint, request, jsonify, render_template, flash, redirect, url_for
+from App.models import Recipe,User
+from flask_login import current_user, login_required
+from flask_jwt_extended import jwt_required, current_user
 from App.controllers import (
     add_recipe_to_user,
     add_inventory_to_user,
@@ -81,3 +84,19 @@ def check_recipe_ingredients(recipe_id):
         return jsonify({'message': result}), 200
     except Exception as e:
         return jsonify({'error': str(e)}), 500
+
+
+# Add this to your recipe_views.py
+@recipe_views.route('/recipes/<int:recipe_id>', methods=['GET'])
+def recipe_details_page(recipe_id):
+    recipe = Recipe.query.get(recipe_id)
+    if not recipe:
+        flash('Recipe not found', 'error')
+        return redirect(url_for('recipe_views.my_recipes_page'))
+    return render_template('recipe-details.html', recipe=recipe)
+
+@recipe_views.route('/my-recipes')
+@jwt_required()
+def my_recipes_page():
+    recipes = Recipe.query.filter_by(user_id=current_user.id).all()
+    return render_template('recipes.html', recipes=recipes)
