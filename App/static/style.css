@@ -1,8 +1,4 @@
-html {
-  padding: 0;
-  background-color: #9a2a2a;
-}
-
+/* Base Styles */
 :root {
   --bg-color: #9a2a2a;
   --nav-color: #581919;
@@ -15,165 +11,194 @@ html {
   --text-light: #ffffff;
 }
 
-body {
-  margin: 0;
-  font-family: 'Arial Rounded MT Bold', sans-serif;
-  color: var(--text-light);
-}
-
-/* Main Container */
 .add-recipe-container {
+  background: var(--bg-color);
   min-height: 100vh;
-  padding: 40px 60px;
-  max-width: 1200px;
-  margin: auto;
-  display: flex;
-  flex-direction: column;
-  gap: 30px;
-}
-
-/* Top Field - Name */
-.form-row {
-  display: flex;
-  flex-direction: row;
-  gap: 20px;
-  width: 100%;
-}
-
-.input-group {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-}
-
-.input-label {
-  font-size: 22px;
-  margin-bottom: 8px;
-}
-
-.input-field input,
-.input-field select,
-textarea {
-  width: 100%;
-  padding: 16px 24px;
-  font-size: 18px;
-  border-radius: 30px;
-  background-color: var(--input-bg);
-  border: none;
-  color: var(--text-light);
-}
-
-textarea {
-  height: 480px;
-  resize: none;
-}
-
-/* URL Row */
-.url-row {
-  display: flex;
-  gap: 20px;
-}
-
-/* Bottom Row */
-.content-row {
-  display: flex;
-  gap: 30px;
-  justify-content: space-between;
-}
-
-/* Ingredients Section */
-.ingredients-section {
-  background-color: #db8282;
-  border-radius: 40px;
-  padding: 24px;
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
+  font-family: 'Jersey20-Regular', sans-serif;
   position: relative;
 }
 
-.ingredient-controls {
+/* Navigation Bar */
+.nav-bar {
+  background: var(--nav-color);
+  border-radius: 75px;
+  height: 84px;
   display: flex;
-  flex-direction: column;
-  gap: 20px;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 50px;
+  margin: 24px 68px;
 }
 
-.ingredient-type select,
-.ingredient-measurement input,
-.ingredient-name input {
-  background-color: var(--ingredient-bg);
-  color: white;
-  border-radius: 40px;
-  border: none;
-  padding: 12px 20px;
-  font-size: 18px;
-  width: 100%;
+.search-box {
+  background: var(--search-color);
+  border-radius: 75px;
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+  height: 60px;
+}
+
+.search-icon {
+  width: 24px;
+  height: 24px;
+  margin-right: 10px;
+}
+
+.search-text {
+  color: var(--text-light);
+  font-size: 35px;
+  opacity: 0.95;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 40px;
+}
+
+.nav-item {
+  color: var(--text-light);
+  font-size: 32px;
+}
+
+.nav-item.active {
+  text-decoration: underline;
+}
+
+.login-btn {
+  background: var(--login-color);
+  border-radius: 45px;
+  padding: 8px 20px;
+  color: var(--text-light);
+  font-size: 32px;
+  opacity: 0.75;
+}
+
+/* Page Title */
+.page-title {
+  color: var(--text-light);
+  font-family: 'Jomhuria-Regular', sans-serif;
+  font-size: 96px;
+  margin: 50px 0 0 79px;
+}
+
+/* Form Layout */
+.form-section {
+  display: flex;
+  gap: 40px;
+  margin: 40px 100px;
+}
+
+.form-column {
+  flex: 1;
+}
+
+.left-column {
+  background: var(--div-color);
+  border-radius: 50px;
+  padding: 30px;
+}
+
+.right-column {
+  background: var(--div-color);
+  border-radius: 50px;
+  padding: 30px;
+}
+
+/* Input Fields */
+.input-group {
+  margin-bottom: 30px;
+}
+
+.input-label {
+  color: var(--text-light);
+  font-size: 32px;
+  margin-bottom: 10px;
+}
+
+.input-field {
+  background: var(--input-bg);
+  border-radius: 75px;
+  height: 63px;
+}
+
+/* Ingredients Section */
+.section-title {
+  color: var(--text-light);
+  font-size: 32px;
+  margin-bottom: 20px;
+}
+
+.ingredient-row {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 15px;
+}
+
+.ingredient-type,
+.ingredient-measurement,
+.ingredient-name {
+  background: var(--ingredient-bg);
+  border-radius: 45px;
+  padding: 10px 20px;
+  color: var(--text-light);
+  font-size: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .ingredient-type {
-  width: 100%;
+  flex: 2;
 }
 
 .ingredient-measurement {
-  width: 40%;
+  flex: 1;
 }
 
 .ingredient-name {
-  width: 55%;
-  display: flex;
-  align-items: center;
+  flex: 1.5;
 }
 
-.add-btn,
-.ellipse-btn {
-  width: 42px;
-  height: 42px;
+.add-btn {
+  background: #4e0606;
+  width: 34px;
+  height: 34px;
   border-radius: 50%;
-  background-color: #4e0606;
-  border: none;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
 }
 
-.add-btn img,
-.ellipse-btn img {
-  width: 21px;
-  height: 21px;
-}
-
 /* Directions Section */
-.directions-section {
-  background-color: #e26868;
-  border-radius: 40px;
-  padding: 24px;
-  flex: 1;
+.directions-field {
+  background: var(--ingredient-bg);
+  border-radius: 45px;
+  padding: 20px;
+  height: 500px;
   position: relative;
-  display: flex;
-  flex-direction: column;
 }
 
-.section-title {
-  font-size: 24px;
-  font-weight: bold;
-  margin-bottom: 20px;
+.directions-text {
+  color: var(--text-light);
+  font-size: 32px;
 }
 
 /* Submit Button */
 .submit-btn {
-  background-color: var(--add-recipe-color);
-  border: none;
-  border-radius: 40px;
-  padding: 18px 40px;
-  font-size: 24px;
-  font-weight: bold;
-  color: white;
-  margin: 20px auto 0;
+  background: var(--add-recipe-color);
+  border-radius: 65px;
+  color: var(--text-light);
+  font-size: 36px;
+  padding: 15px 40px;
+  position: absolute;
+  right: 100px;
+  top: 160px;
   cursor: pointer;
-  width: 300px;
 }
+
 html {
   padding: 0;
   background-color: #9a2a2a;
@@ -650,3 +675,4 @@ nav {
   font-family: "Jersey20-Regular", sans-serif;
   
 }
+
