@@ -9,7 +9,7 @@ class Recipe(db.Model):
     instructions = db.Column(db.String(512), nullable=False)
     image = db.Column(db.String(256), nullable=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-
+    
     def __init__(self, title, number_of_ingredients, ingredients, instructions, user_id, image):
         self.title = title
         line_number_of_ingredients = ';'.join(number_of_ingredients)
