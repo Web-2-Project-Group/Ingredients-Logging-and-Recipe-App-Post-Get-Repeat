@@ -1,0 +1,106 @@
+{% extends "layout.html" %}
+{% block title %}Login{% endblock %}
+{% block page %}Login{% endblock %}
+
+{% block link%}
+    <ul id="nav-mobile" class="right" style=" background-color: orangered;">
+        <li><a href="/signup">Signup</a></li>
+    </ul>
+{% endblock %}
+
+{% block content %}
+<style>
+  main {
+    display: flex;
+    min-height: 100vh; 
+  }
+
+  .form {
+    flex: 0 0 50%; 
+    display: flex;
+    flex-direction: column; 
+    justify-content: center; 
+    align-items: center; 
+    background-color: orangered;
+  }
+
+  .card {
+    width: 80%;
+    padding: 20px;
+    border-radius: 8px;
+    background-color: orangered;
+    border: none; 
+  }
+
+  .input-field input {
+    border-radius: 20px;
+    padding: 8px;
+  }
+
+  .card-action button {
+    background-color: darkred;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 20px;
+    cursor: pointer;
+    justify-content: center;
+    width: 100%; 
+  }
+
+  .logo {
+    flex: 0 0 50%;
+    display: flex;
+    justify-content: center; 
+    align-items: center; 
+    background-color: orangered; 
+  }
+
+  .logo img {
+    max-width: 80%;
+    max-height: 80%;
+    object-fit: contain; 
+  }
+
+  .left-align {
+    text-align: left !important; 
+    margin-top: 0; 
+    color: white; 
+  }
+
+</style>
+
+<main>
+  <div class="form">
+    <div class="welcome">
+      <h2 style="text-align: center;">Welcome!</h2>
+    </div>
+    <form class="card col s12" id="loginForm" method="POST" action="/login">
+      <h4 class="left-align">Login!</h4>
+      <div>
+        <div class="input-field col s12">
+          <input placeholder="Username" class="validate" id="Username">
+          <label for="Username"></label>
+        </div>
+      </div>
+      <div>
+       
+      </div>
+      <div>
+        <div class="input-field col s12">
+          <input placeholder="password" class="validate" id="password">
+          <label for="Password"></label>
+        </div>
+      </div>
+     
+      <div class="card-action row" style=" justify-content: center; align-self: center;" >
+        <button type="submit">Sign up</button>
+      </div>
+    </form>
+  </div>
+  <div class="logo">
+    <img src="https://marketplace.canva.com/EAFMNm9ybqQ/1/0/1600w/canva-gold-luxury-initial-circle-logo-qRQJCijq_Jw.jpg">
+  </div>
+</main>
+
+{% endblock %}
