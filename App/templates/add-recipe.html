@@ -3,9 +3,14 @@
 {% block title %} Add Recipe: {% endblock %}
 {% block content %}
 <div class="add-recipe-container">
-  <h1>Add Recipe:<h1>
-  <!-- Form Container -->
   <form method="POST" action="{{ url_for('recipe_views.add_recipe_action') }}" enctype="multipart/form-data">
+  <div class="header-row">
+    <h1>Add Recipe:</h1>
+    <button type="submit" class="submit-btn rectangle">ADD RECIPE</button>
+  </div>
+  <!-- Form Container -->
+ 
+  <div class="form-container">
     <!-- Top Row (Name) -->
     <div class="form-row">
       <div class="input-group name-field">
@@ -56,6 +61,9 @@
           <div id="ingredient-text" class="ingredient-name rectangle">
             <input type="text" name="ingredient_name" class="hidden-input" placeholder="Ingredient">
           </div>
+          <button type="submit" class="ellipse-btn">
+            <img src="{{ url_for('static', filename='images/plus-icon.png') }}" width="21" height="23" alt="Add ingredient">
+          </button>
           <div id="measurement" class="ingredient-measurement rectangle" title="Measurement" >
             <input type="text" name="measurement" class="hidden-input" placeholder="Measurement">
           </div>
@@ -63,84 +71,19 @@
             <img src="{{ url_for('static', filename='images/plus-icon.png') }}" width="21" height="23" alt="Add ingredient">
           </button>
         </div>
-       
-        <button type="submit" class="ellipse-btn">
-          <img src="{{ url_for('static', filename='images/plus-icon.png') }}" width="21" height="23" alt="Add ingredient">
-        </button>
       </div>
 
 
       <!-- Directions Section -->
       <div class="directions-section rectangle" style="width: 485px; height: 621px;">
-        <div class="section-title">Directions:</div>
-        <textarea name="directions" class="hidden-textarea"></textarea>
+        <div class="section-title">Directions:</div> 
         <button type="button" class="ellipse-btn">
           <img src="{{ url_for('static', filename='images/plus-icon.png') }}" width="21" height="23" alt="Add step">
         </button>
+        <textarea name="directions" class="hidden-textarea"></textarea>
       </div>
     </div>
   </div>
-
-
-  <!-- Submit Button -->
-  <button type="submit" class="submit-btn rectangle" style="width: 282px; height: 69px;">
-    ADD RECIPE
-  </button>
 </form>
 </div>
-
-<script>
-  document.addEventListener('DOMContentLoaded', function() {
-    let ingredientCount = 1;
-    
-    // Add new ingredient row
-    document.getElementById('add-ingredient-btn').addEventListener('click', function() {
-      const container = document.getElementById('ingredients-container');
-      const newRow = document.createElement('div');
-      newRow.className = 'ingredient-row';
-      newRow.innerHTML = `
-        <div class="ingredient-controls">
-          <div class="ingredient-type rectangle" style="width: 367px; height: 49px;">
-            <select name="ingredient_type_${ingredientCount}" class="hidden-select" required>
-              <option value="">Type of Ingredients</option>
-              <option value="produce">Produce</option>
-              <option value="dairy">Dairy</option>
-              <option value="spices">Herbs/Spices</option>
-              <option value="meat">Meat</option>
-              <option value="pantry">Pantry</option>
-            </select>
-          </div>
-          <div class="ingredient-measurement rectangle" style="width: 130px; height: 44px;">
-            <input type="text" name="ingredient_measurement_${ingredientCount}" class="hidden-input" placeholder="1 cup" required>
-          </div>
-          <div class="ingredient-name rectangle" style="width: 197px; height: 55px;">
-            <input type="text" name="ingredient_name_${ingredientCount}" class="hidden-input" placeholder="Ingredient" required>
-          </div>
-          <button type="button" class="remove-btn ellipse-btn">
-            <img src="{{ url_for('static', filename='images/plus-icon.png') }}" width="21" height="23" alt="Remove" style="transform: rotate(45deg);">
-          </button>
-        </div>
-      `;
-      container.appendChild(newRow);
-      ingredientCount++;
-    });
-  
-    // Remove ingredient row
-    document.addEventListener('click', function(e) {
-      if (e.target.closest('.remove-btn')) {
-        const rows = document.querySelectorAll('.ingredient-row');
-        if (rows.length > 1) {
-          e.target.closest('.ingredient-row').remove();
-        }
-      }
-    });
-  
-    // Add new step
-    document.getElementById('add-step-btn').addEventListener('click', function() {
-      const textarea = document.querySelector('textarea[name="directions"]');
-      textarea.value = textarea.value + '\n\nStep ' + (textarea.value.split('\n\n').length + 1) + ': ';
-      textarea.focus();
-    });
-  });
-  </script>
 {% endblock %}
