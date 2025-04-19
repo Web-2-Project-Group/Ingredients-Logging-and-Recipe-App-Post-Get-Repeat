@@ -12,42 +12,138 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>{% block title %}{% endblock %}</title>
     <style>
-     
+      body {
+        font-family: 'Inter', sans-serif;
+        margin: 0;
+        padding: 0;
+      }
+
+      nav {
+        background-color: #3a0f0f;
+        padding: 10px 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+        position: sticky;
+        top: 20px;
+        z-index: 1000;
+        border-radius: 50px;
+        margin: 10px auto;
+        width: calc(100% - 40px);
+      }
+
+      .search-box {
+        display: flex;
+        align-items: center;
+        background-color: #5a1a1a;
+        border-radius: 25px;
+        padding: 5px 15px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        transition: box-shadow 0.3s ease;
+      }
+
+      .search-box:hover {
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      }
+
+      .search-box input {
+        border: none;
+        outline: none;
+        font-size: 14px;
+        margin-left: 10px;
+        color: white;
+        background-color: transparent;
+      }
+
+      .nav-links {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+      }
+
+      .nav-item {
+        color: white;
+        text-decoration: none;
+        font-weight: bold;
+        text-transform: uppercase;
+        font-size: 14px;
+        padding: 5px 10px;
+        border-radius: 5px;
+        transition: background-color 0.3s ease, color 0.3s ease;
+      }
+
+      .nav-item:hover {
+        background-color: #ffcc80;
+        color: #3a0f0f;
+      }
+
+      .login-form {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .login-form input {
+        padding: 5px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+        font-size: 14px;
+        background-color: transparent; /* Ensure consistent background */
+        color: white; /* Ensure text color is white */
+        outline: none;
+      }
+
+      .login-form input:focus {
+        border-color: #ffcc80; /* Optional: Add focus border color */
+        background-color: transparent; /* Keep background consistent on focus */
+      }
+
+      /* Fix for autofill background turning white */
+      .login-form input:-webkit-autofill {
+        -webkit-box-shadow: 0 0 0px 1000px #3a0f0f inset; /* Match the navbar background color */
+        -webkit-text-fill-color: white; /* Ensure text color remains white */
+        transition: background-color 5000s ease-in-out 0s; /* Prevent autofill background from flashing */
+      }
+
+      .login-btn {
+        background-color: #8b0000;
+        color: white;
+        border-radius: 20px;
+        padding: 5px 15px;
+        text-transform: uppercase;
+        font-weight: bold;
+        text-decoration: none;
+        font-size: 14px;
+        border: none;
+        cursor: pointer;
+        transition: background-color 0.3s ease, box-shadow 0.3s ease;
+      }
+
+      .login-btn:hover {
+        background-color: #a52a2a;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      }
     </style>
   </head>
   <body>
     <nav>
-      <div class="nav-bar">
-          <!-- Search Box -->
-          <div class="search-box rectangle">
-              <img src="{{ url_for('static', filename='images/Search.png') }}" class="search-icon">
-              <div class="search-text">Search....</div>
-          </div>
-          <!-- Navigation Links -->
-          <div class="nav-links">
-              <a href="{{ url_for('index_views.index_page') }}" class="nav-item {% if request.path == '/' %}active{% endif %}">Home</a>
-              <a href="{{ url_for('daily_recipe_views.daily_recipes_page') }}" class="nav-item {% if request.path == '/daily-recipes' %}active{% endif %}">Daily Recipes</a>
-              <a href="{{ url_for('recipe_views.my_recipes_page') }}" class="nav-item {% if request.path == '/my-recipes' %}active{% endif %}">My Recipes</a>
-              <a href="{{ url_for('inventory_views.my_ingredients_page') }}" class="nav-item {% if request.path == '/my-ingredients' %}active{% endif %}">My Ingredients</a>
-              {% if current_user.is_authenticated %}
-                  <a href="{{ url_for('recipe_views.add_recipe_page') }}" class="nav-item add-recipe-btn">Add Recipe</a>
-                  <a href="{{ url_for('auth_views.logout_action') }}" class="nav-item login-btn rectangle">Logout</a>
-              {% else %}
-                  <div class="login-form-container">
-                      <form class="navbar-form" method="POST" action="{{ url_for('auth_views.login_action') }}">
-                          <div class="input-field">
-                              <input placeholder="username" name="username" type="text" class="validate" required>
-                          </div>
-                          <div class="input-field">
-                              <input placeholder="password" name="password" type="password" class="validate" required>
-                          </div>
-                          <button type="submit" class="login-btn rectangle">Login</button>
-                      </form>
-                  </div>
-              {% endif %}
-          </div>
+      <div class="search-box">
+        <img src="{{ url_for('static', filename='images/Search.png') }}" alt="Search Icon">
+        <input type="text" placeholder="Search...">
       </div>
-  </nav>
+      <div class="nav-links">
+        <a href="/" class="nav-item">Home</a>
+        <a href="/daily-recipes" class="nav-item">Daily Recipes</a>
+        <a href="/my-recipes" class="nav-item">My Recipes</a>
+        <a href="/my-ingredients" class="nav-item">My Ingredients</a>
+      </div>
+      <form class="login-form" method="POST" action="/login">
+        <input type="text" name="username" placeholder="Username" required>
+        <input type="password" name="password" placeholder="Password" required>
+        <button type="submit" class="login-btn">Login</button>
+      </form>
+    </nav>
 
     <div class="container" id="content">
       {% block content %}{% endblock %}
@@ -64,29 +160,6 @@
             {% endfor %}
         {% endif %}
       {% endwith %}
-      
-      // Dynamic ingredient adding
-      document.addEventListener('DOMContentLoaded', function() {
-        // Add ingredient row
-        document.getElementById('add-ingredient-btn')?.addEventListener('click', function() {
-          const container = document.getElementById('ingredients-container');
-          const template = document.querySelector('.ingredient-row.template');
-          const newRow = template.cloneNode(true);
-          newRow.classList.remove('template');
-          newRow.style.display = 'flex';
-          container.appendChild(newRow);
-        });
-        
-        // Remove ingredient row
-        document.addEventListener('click', function(e) {
-          if (e.target.classList.contains('remove-ingredient')) {
-            const rows = document.querySelectorAll('.ingredient-row:not(.template)');
-            if (rows.length > 1) {
-              e.target.closest('.ingredient-row').remove();
-            }
-          }
-        });
-      });
     </script>
   </body>
 </html>
