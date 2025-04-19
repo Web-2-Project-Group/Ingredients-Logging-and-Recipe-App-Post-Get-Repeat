@@ -12,95 +12,71 @@
 <style>
   main {
     display: flex;
-    min-height: 100vh; 
+    min-height: 100vh;
   }
 
   .form {
-    flex: 0 0 50%; 
+    flex: 1;
     display: flex;
-    flex-direction: column; 
-    justify-content: center; 
-    align-items: center; 
-    background-color: orangered;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #5a1a1a;
+    color: white;
   }
 
-  .card {
+  .form h2 {
+    margin-bottom: 20px;
+  }
+
+  .form input {
     width: 80%;
-    padding: 20px;
-    border-radius: 8px;
-    background-color: orangered;
-    border: none; 
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 5px;
+    border: none;
   }
 
-  .input-field input {
-    border-radius: 20px;
-    padding: 8px;
-  }
-
-  .card-action button {
-    background-color: darkred;
+  .form button {
+    width: 80%;
+    padding: 10px;
+    background-color: #8b0000;
     color: white;
     border: none;
-    padding: 10px 20px;
-    border-radius: 20px;
+    border-radius: 5px;
     cursor: pointer;
-    justify-content: center;
-    width: 100%; 
+    font-weight: bold;
   }
 
-  .logo {
-    flex: 0 0 50%;
+  .form button:hover {
+    background-color: #a52a2a;
+  }
+
+  .image {
+    flex: 1;
     display: flex;
-    justify-content: center; 
-    align-items: center; 
-    background-color: orangered; 
+    justify-content: center;
+    align-items: center;
+    background-color: #3a0f0f;
   }
 
-  .logo img {
-    max-width: 80%;
-    max-height: 80%;
-    object-fit: contain; 
+  .image img {
+    max-width: 100%;
+    height: auto;
   }
-
-  .left-align {
-    text-align: left !important; 
-    margin-top: 0; 
-    color: white; 
-  }
-
 </style>
 
 <main>
   <div class="form">
-    <div class="welcome">
-      <h2 style="text-align: center;">Welcome!</h2>
-    </div>
-    <form class="card col s12" id="loginForm" method="POST" action="/login">
-      <h4 class="left-align">Login!</h4>
-      <div>
-        <div class="input-field col s12">
-          <input placeholder="Username" class="validate" id="Username">
-          <label for="Username"></label>
-        </div>
-      </div>
-      <div>
-       
-      </div>
-      <div>
-        <div class="input-field col s12">
-          <input placeholder="password" class="validate" id="password">
-          <label for="Password"></label>
-        </div>
-      </div>
-     
-      <div class="card-action row" style=" justify-content: center; align-self: center;" >
-        <button type="submit">Sign up</button>
-      </div>
+    <h2>Welcome!</h2>
+    <form method="POST" action="/login">
+      <input type="text" name="username" placeholder="Username" required>
+      <input type="password" name="password" placeholder="Password" required>
+      <button type="submit">Login</button>
     </form>
   </div>
-  <div class="logo">
-    <img src="https://marketplace.canva.com/EAFMNm9ybqQ/1/0/1600w/canva-gold-luxury-initial-circle-logo-qRQJCijq_Jw.jpg">
+  <div class="image">
+    <img src="https://marketplace.canva.com/EAFMNm9ybqQ/1/0/1600w/canva-gold-luxury-initial-circle-logo-qRQJCijq_Jw.jpg" alt="Logo">
   </div>
 </main>
-
 {% endblock %}
