@@ -1,0 +1,41 @@
+{% extends "layout.html" %}
+
+{% block title %} {{ recipe.name }}{% endblock %}
+
+{% block content %}
+<div class="recipe-detail-container">
+    <h1 class="recipe-title">{{ recipe.name }}</h1>
+    <p class="recipe-description">{{ recipe.description }}</p>
+    <p class="cook-time">{{ recipe.cook_time }}</p>
+
+    <div class="recipe-content">
+        <div class="ingredients-section">
+            <h2>Ingredients:</h2>
+            <ul>
+                {% for ingredients in recipe.ingredients %}
+                <li>{{ ingredient }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <div class="directions-section">
+            <h2>Directions:</h2>
+            <ol>
+                {% for instructions in recipe.instructions %}
+                <li>{{ direction }}</li>
+                {% endfor %}
+            </ol>
+        </div>
+    </div>
+
+    <div class="reviews-section">
+        <h2>Reviews:</h2>
+        <div class="rating">3.5</div>
+
+        <h3>Comments:</h3>
+        <div class="comment">
+            <p>{{ recipe.comments }}</p>
+        </div>
+    </div>
+</div>
+{% endblock %}

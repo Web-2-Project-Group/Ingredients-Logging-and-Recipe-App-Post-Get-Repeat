@@ -1,70 +1,165 @@
 <!doctype html>
 <html>
   <head>
-  
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-     <!--Import Google Icon Font-->
+    <!--Import Google Icon Font-->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <!-- Compiled and minified CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <!-- Custom Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <!--Let browser know website is optimized for mobile-->
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>{% block title %}{% endblock %}</title>
+    <style>
+      body {
+        font-family: 'Inter', sans-serif;
+        margin: 0;
+        padding: 0;
+      }
 
+      nav {
+        background-color: #3a0f0f;
+        padding: 10px 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+        position: sticky;
+        top: 20px;
+        z-index: 1000;
+        border-radius: 50px;
+        margin: 10px auto;
+        width: calc(100% - 40px);
+      }
+
+      .search-box {
+        display: flex;
+        align-items: center;
+        background-color: #5a1a1a;
+        border-radius: 25px;
+        padding: 5px 15px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        transition: box-shadow 0.3s ease;
+      }
+
+      .search-box:hover {
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      }
+
+      .search-box input {
+        border: none;
+        outline: none;
+        font-size: 14px;
+        margin-left: 10px;
+        color: white;
+        background-color: transparent;
+      }
+
+      .nav-links {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+      }
+
+      .nav-item {
+        color: white;
+        text-decoration: none;
+        font-weight: bold;
+        text-transform: uppercase;
+        font-size: 14px;
+        padding: 5px 10px;
+        border-radius: 5px;
+        transition: background-color 0.3s ease, color 0.3s ease;
+      }
+
+      .nav-item:hover {
+        background-color: #ffcc80;
+        color: #3a0f0f;
+      }
+
+      .login-form {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .login-form input {
+        padding: 5px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+        font-size: 14px;
+        background-color: transparent; /* Ensure consistent background */
+        color: white; /* Ensure text color is white */
+        outline: none;
+      }
+
+      .login-form input:focus {
+        border-color: #ffcc80; /* Optional: Add focus border color */
+        background-color: transparent; /* Keep background consistent on focus */
+      }
+
+      /* Fix for autofill background turning white */
+      .login-form input:-webkit-autofill {
+        -webkit-box-shadow: 0 0 0px 1000px #3a0f0f inset; /* Match the navbar background color */
+        -webkit-text-fill-color: white; /* Ensure text color remains white */
+        transition: background-color 5000s ease-in-out 0s; /* Prevent autofill background from flashing */
+      }
+
+      .login-btn {
+        background-color: #8b0000;
+        color: white;
+        border-radius: 20px;
+        padding: 5px 15px;
+        text-transform: uppercase;
+        font-weight: bold;
+        text-decoration: none;
+        font-size: 14px;
+        border: none;
+        cursor: pointer;
+        transition: background-color 0.3s ease, box-shadow 0.3s ease;
+      }
+
+      .login-btn:hover {
+        background-color: #a52a2a;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      }
+    </style>
   </head>
   <body>
-    
-      <nav class="purple">
-          <div class="nav-wrapper">
-              <a href="#!" class="brand-logo center">{% block page %}{% endblock %}</a>
-              <ul id="nav-mobile" class="left">
-                  <li><a href="/">Home</a></li>
-                  <li><a href="/users">Users Jinja</a></li>
-                  {% if is_authenticated %}
-                    <li><a href="/identify">Identify</a></li>
-                  {% endif %}
-                  <li><a href="/static/users">Users JS</a></li>
-              </ul>
-              {% if is_authenticated %}
-              <ul id="nav-mobile" class="right">
-                <li><a href="/logout">Logout</a></li>
-              </ul>
-              {% else %}
-              <form class="right navbar-form" method="POST" action="/login" style="display: flex; flex-wrap: nowrap; align-items: center; margin-right: 10px;">
-                  <div class="input-field" style="margin-right: 10px;">
-                      <input placeholder="username" value="bob" name="username" type="text" class="validate" required>
-                      <label for="username">username</label>
-                  </div>
-                  <div class="input-field" style="margin-right: 10px;">
-                      <input placeholder="password"value="bobpass" name="password" type="password" class="validate" required>
-                      <label for="password">Password</label>
-                  </div>
-                  <button type="submit" class="btn waves-effect waves-light">Login</button>
-              </form>
-              {% endif %}
-              
-          </div>
-      </nav>
-      <style>
-          .navbar-form label {
-              color: white !important;
-          }
-      </style>
+    <nav>
+      <div class="search-box">
+        <img src="{{ url_for('static', filename='images/Search.png') }}" alt="Search Icon">
+        <input type="text" placeholder="Search...">
+      </div>
+      <div class="nav-links">
+        <a href="/" class="nav-item">Home</a>
+        <a href="/daily-recipes" class="nav-item">Daily Recipes</a>
+        <a href="/my-recipes" class="nav-item">My Recipes</a>
+        <a href="/my-ingredients" class="nav-item">My Ingredients</a>
+      </div>
+      <form class="login-form" method="POST" action="/login">
+        <input type="text" name="username" placeholder="Username" required>
+        <input type="password" name="password" placeholder="Password" required>
+        <button type="submit" class="login-btn">Login</button>
+      </form>
+    </nav>
 
-    <div class="container" id="content">{% block content %}{% endblock %}</div>
+    <div class="container" id="content">
+      {% block content %}{% endblock %}
+    </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
     <script>
-       M.AutoInit();
+      M.AutoInit();
 
-        {% with messages = get_flashed_messages() %}
-          {% if messages %}
-              {% for message in messages %}
-              M.toast({html: '{{message}}'})
-              {% endfor %}
-          {% endif %}
-        {% endwith %}
-       
+      {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for message in messages %}
+            M.toast({html: '{{message}}'})
+            {% endfor %}
+        {% endif %}
+      {% endwith %}
     </script>
   </body>
 </html>
