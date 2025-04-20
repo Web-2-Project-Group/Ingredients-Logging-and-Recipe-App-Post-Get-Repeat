@@ -144,27 +144,37 @@ def my_recipes_page():
 
 
 @recipe_views.route('/recipes/<int:recipe_id>/review', methods=['POST'])
-@login_required
+@jwt_required()
 def add_review(recipe_id):
-    rating = request.form.get('rating', type=int)
-    comment = request.form.get('comment', '').strip()
-    
-    if not comment:
-        flash('Please enter a review comment', 'error')
-        return redirect(url_for('recipe_views.recipe_details_page', recipe_id=recipe_id))
-    
     try:
+        # Get and validate rating
+        rating = float(request.form.get('rating'))
+        if not (1 <= rating <= 5):
+            flash('Rating must be between 1 and 5', 'error')
+            return redirect(url_for('recipe_views.recipe_details_page', recipe_id=recipe_id))
+        
+        # Get and validate comment
+        comment = request.form.get('comment', '').strip()
+        if not comment:
+            flash('Please enter a review comment', 'error')
+            return redirect(url_for('recipe_views.recipe_details_page', recipe_id=recipe_id))
+        
+        # Create and save review
         review = Review(
             rating=rating,
             comment=comment,
             user_id=current_user.id,
             recipe_id=recipe_id
         )
+        
         db.session.add(review)
         db.session.commit()
+        
         flash('Your review has been added!', 'success')
+    except ValueError:
+        flash('Please enter a valid number for rating', 'error')
     except Exception as e:
         db.session.rollback()
-        flash('Failed to add review', 'error')
+        flash('Failed to add review: ' + str(e), 'error')
     
     return redirect(url_for('recipe_views.recipe_details_page', recipe_id=recipe_id))

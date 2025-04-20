@@ -10,5 +10,6 @@ class Review(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     recipe_id = db.Column(db.Integer, db.ForeignKey('recipe.id'), nullable=False)
     
+    # Relationships
     #user = db.relationship('User', backref='reviews')
-    recipe = db.relationship('Recipe')
+    recipe = db.relationship('Recipe', overlaps="recipe_association,recipe_reviews")

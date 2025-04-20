@@ -111,6 +111,68 @@ li {
     border-left: 3px solid #9a2a2a;
 }
 
+.reviews-section {
+    margin-top: 40px;
+    padding-top: 20px;
+    border-top: 1px solid #eee;
+}
+
+.review {
+    background-color: #f8f9fa;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    border-left: 3px solid #9a2a2a;
+}
+
+.review-meta {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    font-size: 0.9em;
+}
+
+.review-rating {
+    font-weight: bold;
+    color: #9a2a2a;
+}
+
+.review-comment {
+    line-height: 1.5;
+}
+
+.review-form {
+    background-color: #f5f5f5;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 30px;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.form-group input[type="number"] {
+    width: 100px;
+    padding: 8px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+}
+
+.form-group textarea {
+    width: 100%;
+    padding: 8px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    min-height: 100px;
+}
+
 /* Responsive adjustments */
 @media (max-width: 768px) {
     .recipe-content {
@@ -164,35 +226,24 @@ li {
         <h2>Leave a Review</h2>
         <form class="review-form" method="POST" action="{{ url_for('recipe_views.add_review', recipe_id=recipe.id) }}">
             <div class="form-group">
-                <label for="rating">Rating:</label>
-                <div class="star-rating">
-                    <input type="radio" id="star5" name="rating" value="5" />
-                    <label for="star5">★</label>
-                    <input type="radio" id="star4" name="rating" value="4" />
-                    <label for="star4">★</label>
-                    <input type="radio" id="star3" name="rating" value="3" checked />
-                    <label for="star3">★</label>
-                    <input type="radio" id="star2" name="rating" value="2" />
-                    <label for="star2">★</label>
-                    <input type="radio" id="star1" name="rating" value="1" />
-                    <label for="star1">★</label>
-                </div>
+                <label for="rating">Rating (1-5):</label>
+                <input type="number" id="rating" name="rating" min="1" max="5" step="0.1" required>
             </div>
             <div class="form-group">
                 <label for="comment">Your Review:</label>
-                <textarea class="form-control" id="comment" name="comment" rows="4" required></textarea>
+                <textarea name="comment" rows="4" required></textarea>
             </div>
             <button type="submit" class="btn">Submit Review</button>
         </form>
-
+    
         <h2>Reviews</h2>
         {% if recipe.recipe_reviews %}
             {% for review in recipe.recipe_reviews %}
-            <div class="user-review">
-                <div class="review-author">{{ review.reviewer }}</div>
-                <div class="review-rating">
-                    {% for i in range(review.rating) %}★{% endfor %}
-                    {% for i in range(5 - review.rating) %}☆{% endfor %}
+            <div class="review">
+                <div class="review-meta">
+                    <span class="review-author">{{ review.reviewer.username }}</span>
+                    <span class="review-date">{{ review.created_at.strftime('%B %d, %Y') }}</span>
+                    <span class="review-rating">{{ "%.1f"|format(review.rating) }}/5</span>
                 </div>
                 <div class="review-comment">{{ review.comment }}</div>
             </div>
