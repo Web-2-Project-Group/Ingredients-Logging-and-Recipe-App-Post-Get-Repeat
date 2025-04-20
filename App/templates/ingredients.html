@@ -1,0 +1,89 @@
+{% extends "layout.html" %}
+{% block title %}{% endblock %}
+{% block page %}{% endblock %}
+
+{% block link%}
+<nav style="background-color: orangered; border: none; margin: 0; padding: 10px 5%;  overflow: hidden;" >
+    <div class="nav-wrapper" style="background-color: darkred; border-radius: 50px; padding: 10px 20px; display: flex; align-items: center; justify-content: space-between">
+        <div class="left">
+            <input type="text" placeholder="Search.." style="border: none; border-radius: 50px; background-color: orangered;">
+        </div>
+        <ul id="nav-mobile" class="right hide-on-med-and-down" style="display: flex; align-items: center;">
+            <li style="margin-left: 15px;"><a href="/daily-recipes">Daily Recipes</a></li>
+            <li style="margin-left: 15px;"><a href="/my-recipes">Recipes</a></li>
+            <li style="margin-left: 15px;"><a href="/my-ingredients">My Ingredients</a></li>
+            <li style="margin-left: 15px;"><a href="/login" style="background-color: orangered; margin-top: 25px; margin-bottom: 25px; border-radius: 50px;">Login</a></li>
+            <li style="margin-left: 15px;">{{current_user}}</li>
+        </ul>
+    </div>
+</nav>
+{% endblock %}
+
+
+{% block content %}
+<style>
+    .card {
+        border-radius: 15px;
+        overflow: hidden; 
+        width: 23em;
+        height: 30em;
+        background-color: darkred;
+        display: flex;
+        flex-direction: column;
+        padding: 15px;
+    }
+
+    .cardcontent {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .card-title {
+        color: white;
+        font-size: 20px;
+    }
+
+    .add {
+        border: none; 
+        background-color: orangered;
+        color: white;
+        border-radius: 50px; 
+        padding: 10px 20px;
+
+    }
+
+    .delete {
+        border: none; 
+        background-color: orangered;
+        color: white;
+        border-radius: 50px; 
+        padding: 10px 20px;
+        margin-top: auto;
+        align-self: flex-end;
+    }
+</style>
+
+
+<main style=" background-color: orangered; padding:none;">
+    <div style="display: flex; justify-content: space-between; align-items: center; padding: 0 20px; margin-bottom: 20px;">
+        <h3 style="margin: 0;">My Ingredients:</h3>
+    </div>
+
+    <div class="row" style="padding-left: 18%;" >
+        {% for ingredient in inventory %}
+        <div class="col s12 m6 l6">
+            <div class="card">
+                <div class="cardcontent">
+                    <span class="card-title">{{igredient.item_name}}}</span>
+                    <button class="add">Add</button>
+                </div>
+                <button class="delete">Delete</button>
+            </div>
+        </div>
+        {% endfor %}}
+    </div>
+</main>
+
+
+{% endblock %}
