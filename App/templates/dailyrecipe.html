@@ -9,11 +9,13 @@
             <input type="text" placeholder="Search.." style="border: none; border-radius: 50px; background-color: orangered;">
         </div>
         <ul id="nav-mobile" class="right hide-on-med-and-down" style="display: flex; align-items: center;">
-            <li style="margin-left: 15px;"><a href="Daily_Recipes.html">Daily Recipes</a></li>
-            <li style="margin-left: 15px;"><a href="Recipes.html">Recipes</a></li>
-            <li style="margin-left: 15px;"><a href="Ingredients.html">My Ingredients</a></li>
-            <li style="margin-left: 15px;"><a href="#" style="background-color: orangered; margin-top: 25px; margin-bottom: 25px; border-radius: 50px;">Login</a></li>
-            <li style="margin-left: 15px;">current_user</li>
+            <ul id="nav-mobile" class="right hide-on-med-and-down" style="display: flex; align-items: center;">
+                <li style="margin-left: 15px;"><a href="/daily-recipes">Daily Recipes</a></li>
+                <li style="margin-left: 15px;"><a href="/my-recipes">Recipes</a></li>
+                <li style="margin-left: 15px;"><a href="/my-ingredients">My Ingredients</a></li>
+                <li style="margin-left: 15px;"><a href="/login" style="background-color: orangered; margin-top: 25px; margin-bottom: 25px; border-radius: 50px;">Login</a></li>
+                <li style="margin-left: 15px;">{{current_user}}</li>
+            </ul>
         </ul>
     </div>
 </nav>
@@ -50,97 +52,28 @@
 
 </style>
 
-<main style=" background-color: orangered; paddding:none;">
+<main style=" background-color: orangered; padding:none;">
     <div style="display: flex; justify-content: space-between; align-items: center; padding: 0 20px; margin-bottom: 20px;">
-        <h3 style="margin: 0;">Daily Recipes</h3>
+        <h3 style="margin: 0;">Daily Recipes:</h3>
 </div>
 
     <div class="row">
+        {% for recipe in dailyrecipes %}
         <div class="col s3 m3 l3">
             <div class="card">
                 <div class="card-image">
-                    <img src="https://www.foodiesfeed.com/wp-content/uploads/2023/06/burger-with-melted-cheese.jpg" >
+                    <img src="{{recipe.image}}" >
                 </div>
                 <div class="card-content">
-                    <span  a href="####"class="card-title" >Burger</span>
-                    <p>I am a very simple card. I am good at containing small bits of information.</p>
+                    <span  a href="/recipe-details" class="card-title" >{{recipe.title}}</span>
+                    <p>{{recipe.description}}</p>
                 </div>
-
                     <div class="recipe-info">
-                        <img src="https://static.vecteezy.com/system/resources/previews/004/397/047/original/clock-icon-clock-time-symbol-flat-style-design-web-site-icon-logo-app-ui-illustration-eps10-free-vector.jpg">
-                        <span class="time">45 mins</span>
+                        <span class="time">{{recipe.cook_time}}</span>
                     </div>
-
             </div>
         </div>
-        <div class="col s3 m3 l3">
-            <div class="card">
-                <div class="card-image">
-                    <img src="https://www.foodiesfeed.com/wp-content/uploads/2023/06/burger-with-melted-cheese.jpg" >
-                </div>
-                <div class="card-content">
-                    <span class="card-title">Burger</span>
-                    <p>I am a very simple card. I am good at containing small bits of information.</p>
-                </div>
-
-                    <div class="recipe-info">
-                        <img src="https://static.vecteezy.com/system/resources/previews/004/397/047/original/clock-icon-clock-time-symbol-flat-style-design-web-site-icon-logo-app-ui-illustration-eps10-free-vector.jpg">
-                        <span class="time">45 mins</span>
-                    </div>
-
-            </div>
-        </div>
-        <div class="col s3 m3 l3">
-            <div class="card">
-                <div class="card-image">
-                    <img src="https://www.foodiesfeed.com/wp-content/uploads/2023/06/burger-with-melted-cheese.jpg" >
-                </div>
-                <div class="card-content">
-                    <span class="card-title">Burger</span>
-                    <p>I am a very simple card. I am good at containing small bits of information.</p>
-                </div>
-
-                    <div class="recipe-info">
-                        <img src="https://static.vecteezy.com/system/resources/previews/004/397/047/original/clock-icon-clock-time-symbol-flat-style-design-web-site-icon-logo-app-ui-illustration-eps10-free-vector.jpg">
-                        <span class="time">45 mins</span>
-                    </div>
-
-            </div>
-        </div>
-        <div class="col s3 m3 l3">
-            <div class="card">
-                <div class="card-image">
-                    <img src="https://www.foodiesfeed.com/wp-content/uploads/2023/06/burger-with-melted-cheese.jpg" >
-                </div>
-                <div class="card-content">
-                    <span class="card-title">Burger</span>
-                    <p>I am a very simple card. I am good at containing small bits of information.</p>
-                </div>
-
-                    <div class="recipe-info">
-                        <img src="https://static.vecteezy.com/system/resources/previews/004/397/047/original/clock-icon-clock-time-symbol-flat-style-design-web-site-icon-logo-app-ui-illustration-eps10-free-vector.jpg">
-                        <span class="time">45 mins</span>
-                    </div>
-
-            </div>
-        </div>
-        <div class="col s3 m3 l3">
-            <div class="card">
-                <div class="card-image">
-                    <img src="https://www.foodiesfeed.com/wp-content/uploads/2023/06/burger-with-melted-cheese.jpg" >
-                </div>
-                <div class="card-content">
-                    <span class="card-title">Burger</span>
-                    <p>I am a very simple card. I am good at containing small bits of information.</p>
-                </div>
-
-                    <div class="recipe-info">
-                        <img src="https://static.vecteezy.com/system/resources/previews/004/397/047/original/clock-icon-clock-time-symbol-flat-style-design-web-site-icon-logo-app-ui-illustration-eps10-free-vector.jpg">
-                        <span class="time">45 mins</span>
-                    </div>
-
-            </div>
-        </div>
+        {% endfor %}
     </div>
 </main>
 
