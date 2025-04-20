@@ -3,6 +3,138 @@
 {% block title %} {{ recipe.name }}{% endblock %}
 
 {% block content %}
+<style>
+    /* recipe-details.css - Add this to your static/css folder or in a style block */
+
+.recipe-detail-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    font-family: 'Arial', sans-serif;
+    color: #333;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.recipe-title {
+    font-size: 2.5rem;
+    color: #9a2a2a; /* Dark red to match your theme */
+    margin-bottom: 10px;
+    border-bottom: 2px solid #d56666; /* Lighter red */
+    padding-bottom: 10px;
+}
+
+.cook-time {
+    font-size: 1.1rem;
+    color: #666;
+    margin-bottom: 20px;
+    font-style: italic;
+}
+
+.recipe-description {
+    font-size: 1.2rem;
+    line-height: 1.6;
+    margin-bottom: 30px;
+}
+
+.recipe-content {
+    display: flex;
+    gap: 30px;
+    margin-bottom: 40px;
+}
+
+.ingredients-section, .directions-section {
+    flex: 1;
+}
+
+.ingredients-section {
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 8px;
+    border-left: 4px solid #9a2a2a;
+}
+
+.directions-section {
+    background-color: #f5f5f5;
+    padding: 20px;
+    border-radius: 8px;
+    border-left: 4px solid #d56666;
+}
+
+h2 {
+    font-size: 1.8rem;
+    color: #9a2a2a;
+    margin-bottom: 15px;
+}
+
+h3 {
+    font-size: 1.4rem;
+    color: #d56666;
+    margin: 20px 0 10px;
+}
+
+ul, ol {
+    padding-left: 20px;
+}
+
+li {
+    margin-bottom: 8px;
+    line-height: 1.5;
+}
+
+.missing-ingredients {
+    margin-top: 30px;
+    background-color: #fff3f3;
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 4px solid #ff6b6b;
+}
+
+.reviews-section {
+    margin-top: 40px;
+    padding-top: 20px;
+    border-top: 1px solid #eee;
+}
+
+.rating {
+    font-size: 1.5rem;
+    color: #ffc107; /* Gold/yellow for stars */
+    margin: 10px 0;
+}
+
+.comment {
+    background-color: #f8f9fa;
+    padding: 15px;
+    border-radius: 8px;
+    margin-top: 15px;
+    border-left: 3px solid #9a2a2a;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .recipe-content {
+        flex-direction: column;
+    }
+    
+    .recipe-title {
+        font-size: 2rem;
+    }
+}
+
+/* Add these classes to match your specific ingredient categories */
+.ingredient-category {
+    margin-bottom: 15px;
+}
+
+.ingredient-category h4 {
+    font-size: 1.2rem;
+    color: #9a2a2a;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+</style>
 <div class="recipe-detail-container">
     <h1 class="recipe-title">{{ recipe.name }}</h1>
     <p class="recipe-description">{{ recipe.description }}</p>
@@ -22,7 +154,7 @@
             <h2>Directions:</h2>
             <ol>
                 {% for instructions in recipe.instructions %}
-                <li>{{ direction }}</li>
+                <li>{{ instructions }}</li>
                 {% endfor %}
             </ol>
         </div>
