@@ -12,9 +12,12 @@ class User(db.Model):
     recipe = db.relationship('Recipe', backref='user', lazy=True)
     inventory = db.relationship('Inventory', backref='user', lazy=True)
     
-    def __init__(self, username, password):
+    def __init__(self, username):
         self.username = username
-        self.set_password(password)
+        self.password_hash = None 
+        
+    def set_password(self, password):
+        self.password_hash = generate_password_hash(password)
 
     def get_json(self):
         return{
