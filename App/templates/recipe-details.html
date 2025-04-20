@@ -144,7 +144,8 @@ li {
         <div class="ingredients-section">
             <h2>Ingredients:</h2>
             <ul>
-                {% for ingredients in recipe.ingredients %}
+                {ingredients = recipe.ingredients.split(";")}
+                {% for ingredient in ingredients %}
                 <li>{{ ingredient }}</li>
                 {% endfor %}
             </ul>
@@ -153,7 +154,8 @@ li {
         <div class="directions-section">
             <h2>Directions:</h2>
             <ol>
-                {% for instructions in recipe.instructions %}
+                {instructions = recipe.instructions.split(";")}
+                {% for instruction in instructions %}
                 <li>{{ instructions }}</li>
                 {% endfor %}
             </ol>
