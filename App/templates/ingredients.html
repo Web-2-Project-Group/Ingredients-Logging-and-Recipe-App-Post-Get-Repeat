@@ -9,11 +9,11 @@
             <input type="text" placeholder="Search.." style="border: none; border-radius: 50px; background-color: orangered;">
         </div>
         <ul id="nav-mobile" class="right hide-on-med-and-down" style="display: flex; align-items: center;">
-            <li style="margin-left: 15px;"><a href="Daily_Recipes.html">Daily Recipes</a></li>
-            <li style="margin-left: 15px;"><a href="Recipes.html">Recipes</a></li>
-            <li style="margin-left: 15px;"><a href="Ingredients.html">My Ingredients</a></li>
-            <li style="margin-left: 15px;"><a href="#" style="background-color: orangered; margin-top: 25px; margin-bottom: 25px; border-radius: 50px;">Login</a></li>
-            <li style="margin-left: 15px;">current_user</li>
+            <li style="margin-left: 15px;"><a href="/daily-recipes">Daily Recipes</a></li>
+            <li style="margin-left: 15px;"><a href="/my-recipes">Recipes</a></li>
+            <li style="margin-left: 15px;"><a href="/my-ingredients">My Ingredients</a></li>
+            <li style="margin-left: 15px;"><a href="/login" style="background-color: orangered; margin-top: 25px; margin-bottom: 25px; border-radius: 50px;">Login</a></li>
+            <li style="margin-left: 15px;">{{current_user}}</li>
         </ul>
     </div>
 </nav>
@@ -65,22 +65,23 @@
 </style>
 
 
-
 <main style=" background-color: orangered; padding:none;">
     <div style="display: flex; justify-content: space-between; align-items: center; padding: 0 20px; margin-bottom: 20px;">
         <h3 style="margin: 0;">My Ingredients:</h3>
     </div>
 
     <div class="row" style="padding-left: 18%;" >
+        {% for ingredient in inventory %}
         <div class="col s12 m6 l6">
             <div class="card">
                 <div class="cardcontent">
-                    <span class="card-title">Dairy</span>
+                    <span class="card-title">{{ingredient.item_name}}}</span>
                     <button class="add">Add</button>
                 </div>
                 <button class="delete">Delete</button>
             </div>
         </div>
+        {% endfor %}}
     </div>
 </main>
 
