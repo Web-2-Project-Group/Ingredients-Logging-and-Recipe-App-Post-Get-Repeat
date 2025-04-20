@@ -41,9 +41,9 @@ def update_user(id, username):
         return db.session.commit()
     return None
 
-def add_recipe_to_user(user_id, title, number_of_ingredients, ingredients, instructions, image):
+def add_recipe_to_user(user_id, title, number_of_ingredients, ingredients, instructions, image, description, cook_time):
     user = get_user(user_id)
-    recipe = Recipe(title=title, number_of_ingredients=number_of_ingredients, ingredients=ingredients, instructions=instructions, user_id=user_id, image=image)
+    recipe = Recipe(title=title, number_of_ingredients=number_of_ingredients, ingredients=ingredients, instructions=instructions, user_id=user_id, image=image, cook_time=cook_time, description=description)
     if recipe and user:
         user.recipe.append(recipe)
         db.session.add(user)

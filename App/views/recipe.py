@@ -7,7 +7,9 @@ from App.controllers import (
     add_recipe_to_user,
     add_inventory_to_user,
     check_inventory_against_recipe,
-    get_user
+    get_user,
+    get_recipe_by_id,
+    add_review_to_recipe
 )
 
 recipe_views = Blueprint('recipe_views', __name__, template_folder='../templates')
@@ -23,76 +25,55 @@ def add_recipe_page():
 def add_recipe_action():
     data = request.form
     
-    try:
-        # Parse ingredients and measurements with categories
-        ingredients = []
-        quantities = []
-        categories = []
-        i = 0
+    # Parse ingredients and measurements with categories
+    ingredients = []
+    quantities = []
+    categories = []
+    i = 0
+    
+    while f'ingredient_name_{i}' in data:
+        category = data.get(f'ingredient_category_{i}', '').strip()
+        name = data[f'ingredient_name_{i}'].strip()
+        quantity = data[f'ingredient_quantity_{i}'].strip()
+        unit = data[f'ingredient_unit_{i}'].strip()
         
-        while f'ingredient_name_{i}' in data:
-            category = data.get(f'ingredient_category_{i}', '').strip()
-            name = data[f'ingredient_name_{i}'].strip()
-            quantity = data[f'ingredient_quantity_{i}'].strip()
-            unit = data[f'ingredient_unit_{i}'].strip()
+        if name and quantity:  # Only add if both fields have values
+            if not category:
+                flash(f"Please select a category for ingredient: {name}", "error")
+                return redirect(url_for('recipe_views.add_recipe_page'))
             
-            if name and quantity:  # Only add if both fields have values
-                if not category:
-                    flash(f"Please select a category for ingredient: {name}", "error")
-                    return redirect(url_for('recipe_views.add_recipe_page'))
-                
-                ingredients.append(name)
-                quantities.append(f"{quantity} {unit}")
-                categories.append(category)
-            i += 1
+            ingredients.append(name)
+            quantities.append(f"{quantity} {unit}")
+            categories.append(category)
+        i += 1
 
-        if not ingredients:
-            flash("At least one ingredient is required", "error")
-            return redirect(url_for('recipe_views.add_recipe_page'))
+    if not ingredients:
+        flash("At least one ingredient is required", "error")
+        return redirect(url_for('recipe_views.add_recipe_page'))
 
-        # Split instructions by newlines and filter empty lines
-        instructions = [line.strip() for line in data['instructions'].split('\n') if line.strip()]
+    # Split instructions by newlines and filter empty lines
+    instructions = [line.strip() for line in data['instructions'].split('\n') if line.strip()]
 
-        # First add the recipe
-        recipe = Recipe(
-            title=data['title'],
-            number_of_ingredients=';'.join(quantities),
-            ingredients=';'.join(ingredients),
-            instructions=';'.join(instructions),
-            image=data.get('image_url', ''),
-            description=data.get('description', ''),
-            cook_time=data.get('cook_time', ''),
-            user_id=current_user.id
-        )
-        
-        db.session.add(recipe)
-        db.session.commit()
-
-        # Then add ingredients to inventory if they don't exist
-        for i in range(len(ingredients)):
-            # Check if ingredient already exists in user's inventory
-            existing = Inventory.query.filter_by(
-                item_name=ingredients[i],
-                user_id=current_user.id
-            ).first()
-            
-            if not existing:
-                new_inventory = Inventory(
-                    item_name=ingredients[i],
-                    quantity=quantities[i],
-                    category=categories[i],
-                    user_id=current_user.id
-                )
-                db.session.add(new_inventory)
-        
-        db.session.commit()
-        flash("Recipe added successfully and new ingredients added to your inventory!", "success")
+    # First add the recipe
+    recipe = add_recipe_to_user(
+        title=data['title'],
+        number_of_ingredients=';'.join(quantities),
+        ingredients=';'.join(ingredients),
+        instructions=';'.join(instructions),
+        image=data.get('image_url', ''),
+        description=data.get('description', ''),
+        cook_time=data.get('cook_time', ''),
+        user_id=current_user.id
+    )
+    if recipe:
+        flash("Recipe added successfully", "success")
         return redirect(url_for('recipe_views.my_recipes_page'))
 
-    except Exception as e:
+    else:
         db.session.rollback()
-        flash(f"Error: {str(e)}", "error")
+        flash("Error in creating recipe, please try again", "error")
         return redirect(url_for('recipe_views.add_recipe_page'))
+
 # Add an ingredient to a user's inventory
 @recipe_views.route('/inventory/add', methods=['POST'])
 def add_ingredient_action():
@@ -130,7 +111,7 @@ def check_recipe_ingredients(recipe_id):
 # Add this to your recipe_views.py
 @recipe_views.route('/recipes/<int:recipe_id>', methods=['GET'])
 def recipe_details_page(recipe_id):
-    recipe = Recipe.query.get(recipe_id)
+    recipe = get_recipe_by_id(recipe_id)
     if not recipe:
         flash('Recipe not found', 'error')
         return redirect(url_for('recipe_views.my_recipes_page'))
@@ -146,7 +127,6 @@ def my_recipes_page():
 @recipe_views.route('/recipes/<int:recipe_id>/review', methods=['POST'])
 @jwt_required()
 def add_review(recipe_id):
-    try:
         # Get and validate rating
         rating = float(request.form.get('rating'))
         if not (1 <= rating <= 5):
@@ -160,21 +140,14 @@ def add_review(recipe_id):
             return redirect(url_for('recipe_views.recipe_details_page', recipe_id=recipe_id))
         
         # Create and save review
-        review = Review(
+        review = add_review_to_recipe(
             rating=rating,
             comment=comment,
             user_id=current_user.id,
             recipe_id=recipe_id
-        )
-        
-        db.session.add(review)
-        db.session.commit()
-        
-        flash('Your review has been added!', 'success')
-    except ValueError:
-        flash('Please enter a valid number for rating', 'error')
-    except Exception as e:
-        db.session.rollback()
-        flash('Failed to add review: ' + str(e), 'error')
-    
-    return redirect(url_for('recipe_views.recipe_details_page', recipe_id=recipe_id))
+        )      
+        if review:   
+            flash('Your review has been added!', 'success')
+            return redirect(url_for('recipe_views.recipe_details_page', recipe_id=recipe_id))
+        else:
+            flash('Failed to add review. Please try again.', 'error')
