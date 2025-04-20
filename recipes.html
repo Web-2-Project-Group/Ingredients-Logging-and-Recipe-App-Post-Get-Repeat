@@ -1,0 +1,79 @@
+{% extends "layout.html" %}
+{% block title %}{% endblock %}
+{% block page %}{% endblock %}
+
+{% block link%}
+<nav style="background-color: orangered; border: none; margin: 0; padding: 10px 5%;  overflow: hidden;" >
+    <div class="nav-wrapper" style="background-color: darkred; border-radius: 50px; padding: 10px 20px; display: flex; align-items: center; justify-content: space-between">
+        <div class="left">
+            <input type="text" placeholder="Search.." style="border: none; border-radius: 50px; background-color: orangered;">
+        </div>
+        <ul id="nav-mobile" class="right hide-on-med-and-down" style="display: flex; align-items: center;">
+            <li style="margin-left: 15px;"><a href="/daily-recipes">Daily Recipes</a></li>
+            <li style="margin-left: 15px;"><a href="/my-recipes">Recipes</a></li>
+            <li style="margin-left: 15px;"><a href="/my-ingredients">My Ingredients</a></li>
+            <li style="margin-left: 15px;"><a href="/login" style="background-color: orangered; margin-top: 25px; margin-bottom: 25px; border-radius: 50px;">Login</a></li>
+            <li style="margin-left: 15px;">{{current_user}}</li>
+        </ul>
+    </div>
+</nav>
+{% endblock %}
+
+
+{% block content %}
+<style>
+    .card {
+        border-radius: 15px;
+        overflow: hidden; 
+        width: 350px;
+    }
+    .card-content {
+        background-color: orangered;
+        position: relative;
+        border: none;
+    }
+
+    .recipe-info {
+        position: relative;
+        display: flex;
+        align-items: center;
+        background-color: orangered;
+        padding: 10px;
+    }
+    .recipe-info img {
+        width: 20px;
+        height: 20px;
+        object-fit: contain;
+        border-radius: 50%;
+        margin-right: 5px;
+    }
+</style>
+
+<main style=" background-color: orangered; padding:none;">
+    <div style="display: flex; justify-content: space-between; align-items: center; padding: 0 20px; margin-bottom: 20px;">
+        <h3 style="margin: 0;">My Recipes:</h3>
+        <button class="addbutton" a href="/addrecipe" style="border: none; background-color: darkred; color: white; border-radius: 50px; padding: 10px 20px;">Add Recipe</button>
+    </div>
+
+    <div class="row">
+        {% for recipe in myrecipes %}
+        <div class="col s4 m4 l4">
+            <div class="card">
+                <div class="card-image">
+                    <img src="{{recipe.image}}" >
+                </div>
+                <div class="card-content">
+                    <span  a href="/recipe-details" class="card-title">{{recipe.title}}}</span>
+                    <p>{{recipe.description}}</p>
+                </div>
+                    <div class="recipe-info">
+                        <span class="time">{{recipe.cook_time}}</span>
+                    </div>
+            </div>
+        </div>
+        {%endfor%}
+    </div>
+</main>
+
+
+{% endblock %}
