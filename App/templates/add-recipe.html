@@ -66,6 +66,13 @@
           </button>
           <div id="measurement" class="ingredient-measurement rectangle" title="Measurement" >
             <input type="text" name="measurement" class="hidden-input" placeholder="Measurement">
+            <select name="measurement_unit" class="hidden-select" >
+              <option value="cup">cup</option>
+              <option value="teaspoon">teaspoon</option>
+              <option value="Tablespoon">Tablespoon</option>
+              <option value="pound">pound</option>
+              <option value="unit">unit</option>
+            </select>
           </div>
           <button type="submit" class="ellipse-btn">
             <img src="{{ url_for('static', filename='images/plus-icon.png') }}" width="21" height="23" alt="Add ingredient">
