@@ -12,6 +12,8 @@ class Recipe(db.Model):
     cook_time = db.Column(db.String(32), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     
+    recipe_reviews = db.relationship('Review', backref='recipe_association', lazy=True, cascade="all, delete-orphan")
+    
     def __init__(self, title,number_of_ingredients, ingredients, instructions, image=None, user_id=None, description=description, cook_time=cook_time):
         self.title = title
         self.cook_time = cook_time

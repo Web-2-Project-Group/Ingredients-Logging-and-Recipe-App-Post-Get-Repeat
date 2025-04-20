@@ -136,7 +136,7 @@ li {
 }
 </style>
 <div class="recipe-detail-container">
-    <h1 class="recipe-title">{{ recipe.name }}</h1>
+    <h1 class="recipe-title">{{ recipe.title }}</h1>
     <p class="recipe-description">{{ recipe.description }}</p>
     <p class="cook-time">{{ recipe.cook_time }}</p>
 
@@ -144,8 +144,7 @@ li {
         <div class="ingredients-section">
             <h2>Ingredients:</h2>
             <ul>
-                {ingredients = recipe.ingredients.split(";")}
-                {% for ingredient in ingredients %}
+                {% for ingredient in recipe.get_ingredients() %}
                 <li>{{ ingredient }}</li>
                 {% endfor %}
             </ul>
@@ -154,22 +153,53 @@ li {
         <div class="directions-section">
             <h2>Directions:</h2>
             <ol>
-                {instructions = recipe.instructions.split(";")}
-                {% for instruction in instructions %}
-                <li>{{ instructions }}</li>
+                {% for instruction in recipe.get_instructions() %}
+                <li>{{ instruction }}</li>
                 {% endfor %}
             </ol>
         </div>
     </div>
 
     <div class="reviews-section">
-        <h2>Reviews:</h2>
-        <div class="rating">3.5</div>
+        <h2>Leave a Review</h2>
+        <form class="review-form" method="POST" action="{{ url_for('recipe_views.add_review', recipe_id=recipe.id) }}">
+            <div class="form-group">
+                <label for="rating">Rating:</label>
+                <div class="star-rating">
+                    <input type="radio" id="star5" name="rating" value="5" />
+                    <label for="star5">★</label>
+                    <input type="radio" id="star4" name="rating" value="4" />
+                    <label for="star4">★</label>
+                    <input type="radio" id="star3" name="rating" value="3" checked />
+                    <label for="star3">★</label>
+                    <input type="radio" id="star2" name="rating" value="2" />
+                    <label for="star2">★</label>
+                    <input type="radio" id="star1" name="rating" value="1" />
+                    <label for="star1">★</label>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="comment">Your Review:</label>
+                <textarea class="form-control" id="comment" name="comment" rows="4" required></textarea>
+            </div>
+            <button type="submit" class="btn">Submit Review</button>
+        </form>
 
-        <h3>Comments:</h3>
-        <div class="comment">
-            <p>{{ recipe.comments }}</p>
-        </div>
+        <h2>Reviews</h2>
+        {% if recipe.recipe_reviews %}
+            {% for review in recipe.recipe_reviews %}
+            <div class="user-review">
+                <div class="review-author">{{ review.reviewer }}</div>
+                <div class="review-rating">
+                    {% for i in range(review.rating) %}★{% endfor %}
+                    {% for i in range(5 - review.rating) %}☆{% endfor %}
+                </div>
+                <div class="review-comment">{{ review.comment }}</div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <p>No reviews yet. Be the first to review!</p>
+        {% endif %}
     </div>
 </div>
 {% endblock %}

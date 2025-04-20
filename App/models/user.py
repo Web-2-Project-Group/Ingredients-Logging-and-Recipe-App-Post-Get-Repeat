@@ -12,6 +12,12 @@ class User(db.Model):
     recipe = db.relationship('Recipe', backref='user', lazy=True)
     inventory = db.relationship('Inventory', backref='user', lazy=True)
     
+    user_reviews = db.relationship(
+        'Review',
+        backref='reviewer',
+        lazy=True
+    )
+    
     def __init__(self, username):
         self.username = username
         self.password_hash = None 

@@ -1,5 +1,6 @@
+from App.database import db
 from flask import Blueprint, request, jsonify, render_template, flash, redirect, url_for
-from App.models import Recipe,User
+from App.models import Recipe,User,Review
 from flask_login import current_user, login_required
 from flask_jwt_extended import jwt_required, current_user
 from App.controllers import (
@@ -100,3 +101,30 @@ def recipe_details_page(recipe_id):
 def my_recipes_page():
     recipes = Recipe.query.filter_by(user_id=current_user.id).all()
     return render_template('recipes.html', recipes=recipes)
+
+
+@recipe_views.route('/recipes/<int:recipe_id>/review', methods=['POST'])
+@login_required
+def add_review(recipe_id):
+    rating = request.form.get('rating', type=int)
+    comment = request.form.get('comment', '').strip()
+    
+    if not comment:
+        flash('Please enter a review comment', 'error')
+        return redirect(url_for('recipe_views.recipe_details_page', recipe_id=recipe_id))
+    
+    try:
+        review = Review(
+            rating=rating,
+            comment=comment,
+            user_id=current_user.id,
+            recipe_id=recipe_id
+        )
+        db.session.add(review)
+        db.session.commit()
+        flash('Your review has been added!', 'success')
+    except Exception as e:
+        db.session.rollback()
+        flash('Failed to add review', 'error')
+    
+    return redirect(url_for('recipe_views.recipe_details_page', recipe_id=recipe_id))

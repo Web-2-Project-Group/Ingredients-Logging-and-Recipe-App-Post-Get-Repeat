@@ -47,7 +47,9 @@
             <div class="card">
                 <a href="{{ url_for('recipe_views.recipe_details_page', recipe_id=recipe.id) }}">
                     <div class="card-image">
-                        <img src="{{ recipe.image or 'https://www.foodiesfeed.com/wp-content/uploads/2023/06/burger-with-melted-cheese.jpg' }}">
+                        {% for recipe in recipe.image%}
+                        <img src="{{ recipe  }}">
+                        {% endfor %}
                     </div>
                     <div class="card-content">
                         <span class="card-title">{{ recipe.title }}</span>

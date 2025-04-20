@@ -19,10 +19,11 @@ def initialize():
         db.drop_all()
         db.create_all()
         
-        # Create initial user 'bob' with hashed password
-        if not User.query.filter_by(username="bob").first():
+        # Create initial user 'bob'
+        bob = User.query.filter_by(username="bob").first()
+        if not bob:
             bob = User(username="bob")
-            bob.set_password("bobpass")  # Hash the password
+            bob.set_password("bobpass")
             db.session.add(bob)
             db.session.commit()
             print("Initial user 'bob' created with password 'bobpass'")
@@ -30,54 +31,49 @@ def initialize():
             print("User 'bob' already exists")
 
         # Load recipes from CSV
-        csv_path = Path("App/data/recipes.csv")
+        csv_path = Path("App/data/recipe.csv")
         if csv_path.exists():
             with open(csv_path, 'r', encoding='utf-8') as f:
                 reader = csv.DictReader(f)
                 
-                # Case-insensitive column matching
                 field_map = {
                     'title': None,
-                    'number_of_ingredients': None,
+                    'number_of_ingrdients': None,
                     'ingredients': None,
-                    'instructions': None
+                    'instructions': None,
+                    'description': None,
+                    'cook_time': None
                 }
                 
-                # Map actual headers to expected fields
+                # Map headers case-insensitively
                 for header in reader.fieldnames:
                     lower_header = header.lower()
                     if 'title' in lower_header:
                         field_map['title'] = header
-                    elif 'number' in lower_header and 'ingredient' in lower_header:
-                        field_map['number_of_ingredients'] = header
                     elif 'ingredient' in lower_header:
                         field_map['ingredients'] = header
                     elif 'instruction' in lower_header:
                         field_map['instructions'] = header
-                
-                # Verify we found all required columns
-                if None in field_map.values():
-                    missing = [k for k,v in field_map.items() if v is None]
-                    print(f"CSV missing required columns: {missing}")
-                    return False
+                    elif 'description' in lower_header:
+                        field_map['description'] = header
+                    elif 'cook' in lower_header and 'time' in lower_header:
+                        field_map['cook_time'] = header
                 
                 recipes_added = 0
                 for row in reader:
                     try:
-                        # Calculate number of ingredients if not provided
                         ingredients = [i.strip() for i in row[field_map['ingredients']].split(';') if i.strip()]
-                        num_ingredients = len(ingredients)
-                        
-                        # Clean instructions
                         instructions = [i.strip() for i in row[field_map['instructions']].split('.') if i.strip()]
                         
                         recipe = Recipe(
                             title=row[field_map['title']],
-                            number_of_ingredients=num_ingredients,
+                            number_of_ingredients=len(ingredients),
                             ingredients=ingredients,
                             instructions=instructions,
-                            image="",  # Default empty image
-                            user_id=bob.id
+                            image="",
+                            user_id=bob.id,
+                            description=row.get(field_map['description'], ""),
+                            cook_time=row.get(field_map['cook_time'], "")
                         )
                         db.session.add(recipe)
                         recipes_added += 1
@@ -88,7 +84,7 @@ def initialize():
                 db.session.commit()
                 print(f"Successfully added {recipes_added} recipes")
         else:
-            print("No recipes.csv found - database initialized without recipes")
+            print("No recipe.csv found - database initialized without recipes")
         return True
     except Exception as e:
         print(f"Initialization failed: {e}")
