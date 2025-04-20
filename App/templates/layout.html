@@ -128,39 +128,6 @@
   </head>
   <body>
     <nav>
-<<<<<<< HEAD
-      <div class="nav-bar">
-          <!-- Search Box -->
-          <div class="search-box rectangle">
-              <img src="{{ url_for('static', filename='images/Search.png') }}" class="search-icon">
-              <div class="search-text">Search....</div>
-          </div>
-          <!-- Navigation Links -->
-          <div class="nav-links">
-              <a href="{{ url_for('index_views.index_page') }}" class="nav-item {% if request.path == '/' %}active{% endif %}">Home</a>
-              <a href="{{ url_for('daily_recipe_views.daily_recipes_page') }}" class="nav-item {% if request.path == '/daily-recipes' %}active{% endif %}">Daily Recipes</a>
-              <a href="{{ url_for('recipe_views.my_recipes_page') }}" class="nav-item {% if request.path == '/my-recipes' %}active{% endif %}">My Recipes</a>
-              <a href="{{ url_for('inventory_views.my_ingredients_page') }}" class="nav-item {% if request.path == '/my-ingredients' %}active{% endif %}">My Ingredients</a>
-              {% if current_user.is_authenticated %}
-                  <a href="{{ url_for('recipe_views.add_recipe_page') }}" class="nav-item add-recipe-btn">Add Recipe</a>
-                  <a href="{{ url_for('auth_views.logout_action') }}" class="nav-item login-btn rectangle">Logout</a>
-              {% else %}
-                  <div class="login-form-container">
-                      <form class="navbar-form" method="POST" action="{{ url_for('auth_views.login_action') }}">
-                          <div class="input-field">
-                              <input placeholder="username" name="username" type="text" class="validate" required>
-                          </div>
-                          <div class="input-field">
-                              <input placeholder="password" name="password" type="password" class="validate" required>
-                          </div>
-                          <button type="submit" class="login-btn rectangle">Login</button>
-                      </form>
-                  </div>
-              {% endif %}
-          </div>
-      </div>
-  </nav>
-=======
       <div class="search-box">
         <img src="{{ url_for('static', filename='images/Search.png') }}" alt="Search Icon">
         <input type="text" placeholder="Search...">
@@ -177,7 +144,6 @@
         <button type="submit" class="login-btn">Login</button>
       </form>
     </nav>
->>>>>>> d26fa4a32294fd0ec122c924721fe69aaf9f7d68
 
     <div class="container" id="content">
       {% block content %}{% endblock %}
