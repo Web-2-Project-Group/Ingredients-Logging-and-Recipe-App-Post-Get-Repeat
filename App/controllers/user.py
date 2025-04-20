@@ -107,3 +107,5 @@ def check_inventory_against_recipe(user_id, recipe_id): # check if the user has 
             if not inventory_flag:
                 message.append(f"You are missing {ingredient}")
         return message
+    else:
+        return ("Either user or recipe does not exist.")
