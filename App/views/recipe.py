@@ -151,3 +151,22 @@ def add_review(recipe_id):
             return redirect(url_for('recipe_views.recipe_details_page', recipe_id=recipe_id))
         else:
             flash('Failed to add review. Please try again.', 'error')
+
+@recipe_views.route('/search', methods=['GET'])
+@jwt_required()
+def search_recipes():
+    query = request.args.get('q', '').strip()
+    
+    if not query:
+        # Redirect to main recipes page
+        return redirect(url_for('recipe_views.my_recipes_page'))  
+    
+    # Search in both title and ingredients
+    recipes = Recipe.query.filter(
+        (Recipe.title.ilike(f'%{query}%')) | 
+        (Recipe.ingredients.ilike(f'%{query}%'))
+    ).filter_by(user_id=current_user.id).all()
+    
+    return render_template('search_results.html', 
+                         recipes=recipes, 
+                         query=query)
