@@ -118,6 +118,9 @@
         border: none;
         cursor: pointer;
         transition: background-color 0.3s ease, box-shadow 0.3s ease;
+        text-align: center;
+        display: inline-block;
+        min-width: 70px;
       }
 
       .login-btn:hover {
@@ -128,10 +131,11 @@
   </head>
   <body>
     <nav>
-      <div class="search-box">
+      <form class="search-box" action="/search" method="GET">
         <img src="{{ url_for('static', filename='images/Search.png') }}" alt="Search Icon">
-        <input type="text" placeholder="Search...">
-      </div>
+        <input type="text" name="q" placeholder="Search..." required>
+        <button type="submit" style="display: none;"></button>
+      </form>
       <div class="nav-links">
         <a href="/home" class="nav-item">Home</a>
         <a href="/daily-recipes" class="nav-item">Daily Recipes</a>
@@ -160,6 +164,20 @@
             {% endfor %}
         {% endif %}
       {% endwith %}
+
+      document.addEventListener('DOMContentLoaded', function() {
+        const searchForm = document.querySelector('.search-box');
+        const searchInput = searchForm.querySelector('input');
+        
+        searchInput.addEventListener('keypress', function(e) {
+          if (e.key === 'Enter') {
+            e.preventDefault();
+            if (searchInput.value.trim() !== '') {
+              searchForm.submit();
+            }
+          }
+        });
+      });
     </script>
   </body>
 </html>

@@ -1,38 +1,143 @@
 {% extends "layout.html" %}
 
 {% block title %}Add Recipe{% endblock %}
+{% block page %}Add Recipe{% endblock %}
+
 {% block content %}
 <style>
-  /* Ingredient Rows */
-.ingredient-row {
+  /* Main container */
+  .recipe-form-container {
+    max-width: 800px;
+    margin: 30px auto;
+    padding: 25px;
+    background-color: #ffe6e6;
+    border-radius: 15px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  }
+
+  .form-header {
+    color: #2c3e50;
+    margin-bottom: 25px;
+    font-weight: 700;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  /* Form sections */
+  .form-section {
+    padding: 20px;
+    background-color: #f8d7da;
+    border-radius: 10px;
+    margin-bottom: 25px;
+  }
+
+  .form-section-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: #2c3e50;
+    margin-bottom: 15px;
+    border-bottom: 2px solid #e74c3c;
+    padding-bottom: 5px;
+  }
+
+  /* Form elements */
+  .form-group {
+    margin-bottom: 20px;
+  }
+
+  .form-label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #2c3e50;
+  }
+
+  .form-control {
+    width: 100%;
+    padding: 12px 15px;
+    border: 2px solid #f5b7b1;
+    border-radius: 8px;
+    background-color: #fff;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    font-family: 'Inter', sans-serif;
+  }
+
+  .form-control:focus {
+    outline: none;
+    border-color: #e74c3c;
+    box-shadow: 0 0 5px rgba(231, 76, 60, 0.3);
+  }
+
+  textarea.form-control {
+    min-height: 150px;
+    resize: vertical;
+  }
+
+  /* Ingredient rows */
+  .ingredient-row {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 15px;
+    align-items: center;
+  }
+
+  .ingredient-field {
+    flex: 1;
+  }
+
+  .quantity-group {
+    display: flex;
+    gap: 10px;
+  }
+  
+  .quantity-input {
+    flex: 1;
+  }
+  
+  .unit-input {
+    flex: 1;
+  }
+
+  /* Buttons - updated for proper vertical and horizontal centering */
+  .btn {
+    background-color: #e74c3c;
+    color: white;
+    border-radius: 25px;
+    padding: 12px 25px;
+    text-transform: uppercase;
+    font-weight: bold;
+    text-decoration: none;
+    font-size: 14px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
     display: flex;
     align-items: center;
-    gap: 10px;
+    justify-content: center;
+    min-height: 45px;
+  }
+
+  .btn:hover {
+    background-color: #c0392b;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  }
+
+  .btn-add {
+    background-color: #e74c3c;
+    padding: 10px 15px;
     margin-bottom: 15px;
-    flex-wrap: wrap;
-}
-
-.ingredient-type {
-    min-width: 150px;
-    flex: 1;
-}
-
-.ingredient-name {
-    flex: 2;
-}
-
-.ingredient-measurement {
-    flex: 2;
     display: flex;
-    gap: 5px;
-}
+    align-items: center;
+    justify-content: center;
+    min-width: 200px;
+    margin-left: auto;
+    margin-right: auto;
+    min-height: 45px;
+  }
 
-.ingredient-measurement input {
-    flex: 1;
-}
-
-.remove-ingredient {
-    background-color: #ff6b6b;
+  .btn-remove {
+    background-color: #e74c3c;
     color: white;
     border: none;
     border-radius: 50%;
@@ -43,148 +148,172 @@
     align-items: center;
     justify-content: center;
     font-weight: bold;
-}
+    padding: 0;
+  }
 
-.remove-ingredient:hover {
-    background-color: #ff3d3d;
-}
+  .btn-remove:hover {
+    background-color: #c0392b;
+  }
+  
+  /* Update the submit button in the form header */
+  .form-header button {
+    margin-left: 15px;
+    min-width: 120px;
+  }
 
-/* Responsive adjustments */
-@media (max-width: 768px) {
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
     .ingredient-row {
-        flex-direction: column;
-        gap: 8px;
+      flex-direction: column;
+      align-items: flex-start;
     }
-    
-    .ingredient-type,
-    .ingredient-name,
-    .ingredient-measurement {
-        width: 100%;
+
+    .ingredient-field {
+      width: 100%;
     }
-}
+  }
 </style>
-<div class="add-recipe-container">
-  <form method="POST" action="{{ url_for('recipe_views.add_recipe_action') }}" enctype="multipart/form-data" id="recipeForm">
+
+<div class="recipe-form-container">
+  <div class="form-header">
+    <h2>Add New Recipe</h2>
+    <button type="submit" form="recipeForm" class="btn">Save Recipe</button>
+  </div>
+
+  <form id="recipeForm" method="POST" action="{{ url_for('recipe_views.add_recipe_action') }}" enctype="multipart/form-data">
     <input type="hidden" name="user_id" value="{{ current_user.id }}">
     
-    <div class="header-row">
-      <h1>Add Recipe:</h1>
-      <button type="submit" class="submit-btn rectangle">ADD RECIPE</button>
+    <div class="form-section">
+      <h3 class="form-section-title">Recipe Details</h3>
+      
+      <div class="form-group">
+        <label class="form-label" for="title">Recipe Name</label>
+        <input type="text" class="form-control" id="title" name="title" required placeholder="Enter a name for your recipe">
+      </div>
+      
+      <div class="form-group">
+        <label class="form-label" for="description">Description</label>
+        <textarea class="form-control" id="description" name="description" required placeholder="Describe your recipe"></textarea>
+      </div>
+      
+      <div class="form-group">
+        <label class="form-label" for="cook_time">Cooking Time</label>
+        <input type="text" class="form-control" id="cook_time" name="cook_time" required placeholder="e.g., 30 minutes">
+      </div>
+      
+      <div class="form-group">
+        <label class="form-label" for="image_url">Recipe Image URL</label>
+        <input type="url" class="form-control" id="image_url" name="image_url" placeholder="https://example.com/image.jpg">
+      </div>
     </div>
-
-    <div class="form-container">
-      <!-- Recipe Name -->
-      <div class="form-row">
-        <div class="input-group name-field">
-          <div class="input-label">Recipe Name:</div>
-          <div class="input-field rectangle">
-            <input type="text" name="title" class="hidden-input" placeholder="Recipe name" required>
+    
+    <div class="form-section">
+      <h3 class="form-section-title">Ingredients</h3>
+      <div id="ingredientsContainer">
+        <div class="ingredient-row">
+          <div class="ingredient-field">
+            <label class="form-label">Category</label>
+            <select name="ingredient_category_0" class="form-control" required>
+              <option value="">Select Category</option>
+              <option value="produce">Produce</option>
+              <option value="dairy">Dairy</option>
+              <option value="spices">Herbs/Spices</option>
+              <option value="meat">Meat</option>
+              <option value="pantry">Pantry</option>
+            </select>
           </div>
-        </div>
-      </div>
-
-      <!-- Description and Cook Time -->
-      <div class="form-row">
-        <div class="input-group">
-          <div class="input-label">Description:</div>
-          <div class="input-field rectangle">
-            <input type="text" name="description" class="hidden-input" placeholder="Short description">
+          <div class="ingredient-field">
+            <label class="form-label">Name</label>
+            <input type="text" class="form-control" name="ingredient_name_0" placeholder="e.g., Flour" required>
           </div>
-        </div>
-        <div class="input-group">
-          <div class="input-label">Cook Time:</div>
-          <div class="input-field rectangle">
-            <input type="text" name="cook_time" class="hidden-input" placeholder="e.g., 30 mins">
-          </div>
-        </div>
-      </div>
-
-      <!-- Image URL -->
-      <div class="form-row">
-        <div class="input-group">
-          <div class="input-label">Image URL:</div>
-          <div class="input-field rectangle">
-            <input type="url" name="image_url" class="hidden-input" placeholder="https://example.com/image.jpg">
-          </div>
-        </div>
-      </div>
-
-      <!-- Ingredients Section -->
-      <div class="ingredients-section rectangle">
-        <div class="section-title">Ingredients:</div>
-        <div class="ingredient-controls" id="ingredientsContainer">
-          <!-- Template for one ingredient row -->
-          <div class="ingredient-row">
-            <div class="ingredient-type rectangle">
-              <select name="ingredient_category_0" class="hidden-select" required>
-                <option value="">Select Category</option>
-                <option value="produce">Produce</option>
-                <option value="dairy">Dairy</option>
-                <option value="spices">Herbs/Spices</option>
-                <option value="meat">Meat</option>
-                <option value="pantry">Pantry</option>
-              </select>
-            </div>
-            <div class="ingredient-name rectangle">
-              <input type="text" name="ingredient_name_0" class="hidden-input" placeholder="Ingredient" required>
-            </div>
-            <div class="ingredient-measurement rectangle">
-              <input type="text" name="ingredient_quantity_0" class="hidden-input" placeholder="Quantity" required>
-              <select name="ingredient_unit_0" class="hidden-select">
+          <div class="ingredient-field">
+            <label class="form-label">Quantity</label>
+            <div class="quantity-group">
+              <input type="number" class="form-control quantity-input" name="ingredient_quantity_0" placeholder="Amount" required min="0" step="0.25">
+              <select class="form-control unit-input" name="ingredient_unit_0">
                 <option value="unit">unit</option>
                 <option value="cup">cup</option>
                 <option value="teaspoon">teaspoon</option>
                 <option value="Tablespoon">Tablespoon</option>
                 <option value="pound">pound</option>
+                <option value="ounce">ounce</option>
+                <option value="gram">gram</option>
+                <option value="ml">ml</option>
               </select>
             </div>
-            <button type="button" class="remove-ingredient">-</button>
           </div>
+          <button type="button" class="btn-remove" onclick="removeIngredient(this)">-</button>
         </div>
-        <button type="button" id="addIngredient" class="ellipse-btn">
-          <img src="{{ url_for('static', filename='images/plus-icon.png') }}" width="21" height="23" alt="Add ingredient">
-        </button>
       </div>
-
-      <!-- Directions Section -->
-      <div class="directions-section rectangle">
-        <div class="section-title">Directions:</div>
-        <textarea name="instructions" class="hidden-textarea" placeholder="Enter each step on a new line" required></textarea>
+      <button type="button" class="btn btn-add" id="addIngredient">Add Another Ingredient</button>
+    </div>
+    
+    <div class="form-section">
+      <h3 class="form-section-title">Instructions</h3>
+      <div class="form-group">
+        <label class="form-label" for="instructions">Step-by-Step Instructions</label>
+        <textarea class="form-control" id="instructions" name="instructions" required placeholder="Enter each step on a new line"></textarea>
       </div>
     </div>
   </form>
 </div>
 
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-  let ingredientCounter = 1;
-  
-  // Add ingredient row
-  document.getElementById('addIngredient').addEventListener('click', function() {
-    const container = document.getElementById('ingredientsContainer');
-    const newRow = container.firstElementChild.cloneNode(true);
+  document.addEventListener('DOMContentLoaded', function() {
+    let ingredientCounter = 1;
     
-    // Update input names with new index
-    const inputs = newRow.querySelectorAll('input, select');
-    inputs.forEach(input => {
-      const name = input.name.replace(/\d+/, ingredientCounter);
-      input.name = name;
-      if (input.type !== 'hidden') input.value = '';
+    // Add ingredient row
+    document.getElementById('addIngredient').addEventListener('click', function() {
+      const container = document.getElementById('ingredientsContainer');
+      const newRow = document.createElement('div');
+      newRow.className = 'ingredient-row';
+      
+      newRow.innerHTML = `
+        <div class="ingredient-field">
+          <label class="form-label">Category</label>
+          <select name="ingredient_category_${ingredientCounter}" class="form-control" required>
+            <option value="">Select Category</option>
+            <option value="produce">Produce</option>
+            <option value="dairy">Dairy</option>
+            <option value="spices">Herbs/Spices</option>
+            <option value="meat">Meat</option>
+            <option value="pantry">Pantry</option>
+          </select>
+        </div>
+        <div class="ingredient-field">
+          <label class="form-label">Name</label>
+          <input type="text" class="form-control" name="ingredient_name_${ingredientCounter}" placeholder="e.g., Flour" required>
+        </div>
+        <div class="ingredient-field">
+          <label class="form-label">Quantity</label>
+          <div class="quantity-group">
+            <input type="number" class="form-control quantity-input" name="ingredient_quantity_${ingredientCounter}" placeholder="Amount" required min="0" step="0.25">
+            <select class="form-control unit-input" name="ingredient_unit_${ingredientCounter}">
+              <option value="unit">unit</option>
+              <option value="cup">cup</option>
+              <option value="teaspoon">teaspoon</option>
+              <option value="Tablespoon">Tablespoon</option>
+              <option value="pound">pound</option>
+              <option value="ounce">ounce</option>
+              <option value="gram">gram</option>
+              <option value="ml">ml</option>
+            </select>
+          </div>
+        </div>
+        <button type="button" class="btn-remove" onclick="removeIngredient(this)">-</button>
+      `;
+      
+      container.appendChild(newRow);
+      ingredientCounter++;
     });
-    
-    container.appendChild(newRow);
-    ingredientCounter++;
   });
-
+  
   // Remove ingredient row
-  document.addEventListener('click', function(e) {
-    if(e.target.classList.contains('remove-ingredient')) {
-      const rows = document.querySelectorAll('.ingredient-row');
-      if(rows.length > 1) {
-        e.target.closest('.ingredient-row').remove();
-      }
+  function removeIngredient(button) {
+    const rows = document.querySelectorAll('.ingredient-row');
+    if (rows.length > 1) {  // Ensure at least one row is present
+      button.closest('.ingredient-row').remove();
     }
-  });
-});
+  }
 </script>
 {% endblock %}

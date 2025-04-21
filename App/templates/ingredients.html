@@ -1,6 +1,6 @@
 {% extends "layout.html" %}
-{% block title %}{% endblock %}
-{% block page %}{% endblock %}
+{% block title %}My Ingredients{% endblock %}
+{% block page %}My Ingredients{% endblock %}
 
 {% block link%}
 <nav style="background-color: orangered; border: none; margin: 0; padding: 10px 5%;  overflow: hidden;" >
@@ -22,68 +22,106 @@
 
 {% block content %}
 <style>
-    .card {
-        border-radius: 15px;
-        overflow: hidden; 
-        width: 23em;
-        height: 30em;
-        background-color: darkred;
-        display: flex;
-        flex-direction: column;
-        padding: 15px;
-    }
+/* General Layout */
+.row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+    padding: 20px;
+}
 
-    .cardcontent {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
+.col {
+    display: flex;
+    flex-direction: column;
+    flex: 0 0 calc(33.33% - 20px);
+    max-width: calc(33.33% - 20px);
+}
 
-    .card-title {
-        color: white;
-        font-size: 20px;
-    }
+/* Card Styles */
+.card {
+    display: flex;
+    flex-direction: column;
+    border-radius: 15px;
+    overflow: hidden;
+    background-color: #f8d7da; /* Light pinkish-red for the card background */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
 
-    .add {
-        border: none; 
-        background-color: orangered;
-        color: white;
-        border-radius: 50px; 
-        padding: 10px 20px;
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+}
 
-    }
+.card-content {
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
 
-    .delete {
-        border: none; 
-        background-color: orangered;
-        color: white;
-        border-radius: 50px; 
-        padding: 10px 20px;
-        margin-top: auto;
-        align-self: flex-end;
-    }
+.card-title {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #2c3e50;
+}
+
+.card-title:hover {
+    color: #e74c3c;
+}
+
+/* Add Ingredient Button */
+.addbutton {
+    background-color: #e74c3c;
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 25px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.addbutton:hover {
+    background-color: #c0392b;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Updated Background Color */
+main {
+    background-color: #ffe6e6; /* Light pinkish-red to complement the red tones */
+    padding: 20px;
+}
 </style>
 
-
-<main style=" background-color: orangered; padding:none;">
-    <div style="display: flex; justify-content: space-between; align-items: center; padding: 0 20px; margin-bottom: 20px;">
-        <h3 style="margin: 0;">My Ingredients:</h3>
+<main>
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+        <h3 style="margin: 0; color: #2c3e50;">My Ingredients</h3>
+        <button class="addbutton" id="add-ingredient-btn">Add New Ingredient</button>
     </div>
 
-    <div class="row" style="padding-left: 18%;" >
-        {% for ingredient in user.inventory %}
-        <div class="col s12 m6 l6">
+    <div class="row">
+        {% for ingredient in user %}
+        <div class="col">
             <div class="card">
-                <div class="cardcontent">
-                    <span class="card-title">{{ingredient.item_name}}</span>
-                    <button class="add">Add</button>
+                <div class="card-content">
+                    <span class="card-title">{{ ingredient.name }}</span>
+                    <p>{{ ingredient.description }}</p>
                 </div>
-                <button class="delete">Delete</button>
             </div>
         </div>
         {% endfor %}
     </div>
 </main>
 
-
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const addButton = document.getElementById('add-ingredient-btn');
+    if (addButton) {
+      addButton.addEventListener('click', function() {
+        window.location.href = '/inventory/add';
+      });
+    }
+  });
+</script>
 {% endblock %}

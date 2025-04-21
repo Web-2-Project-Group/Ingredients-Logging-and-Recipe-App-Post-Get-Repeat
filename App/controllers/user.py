@@ -38,24 +38,24 @@ def update_user(id, username):
     if user:
         user.username = username
         db.session.add(user)
-        return db.session.commit()
+        db.session.commit()
+        return user
     return None
 
 def add_recipe_to_user(user_id, title, number_of_ingredients, ingredients, instructions, image, description, cook_time):
     user = get_user(user_id)
     recipe = Recipe(title=title, number_of_ingredients=number_of_ingredients, ingredients=ingredients, instructions=instructions, user_id=user_id, image=image, cook_time=cook_time, description=description)
     if recipe and user:
-        user.recipe.append(recipe)
-        db.session.add(user)
-        return db.session.commit()
+        db.session.add(recipe)
+        db.session.commit()
+        return recipe
     return None
 
 def add_inventory_to_user(user_id, item_name, quantity, category):
     user = get_user(user_id)
     inventory = Inventory(item_name=item_name, quantity=quantity, user_id=user_id, category=category)
     if inventory and user:
-        user.inventory.append(inventory)
-        db.session.add(user)
+        db.session.add(inventory)
         return db.session.commit()
     return None
 
@@ -65,7 +65,8 @@ def edit_inventory(user_id, item_name, quantity):
     if inventory and user:
         inventory.quantity = quantity
         db.session.add(inventory)
-        return db.session.commit()
+        db.session.commit()
+        return inventory
     return None
 
 def delete_inventory(user_id, item_name):
@@ -73,7 +74,8 @@ def delete_inventory(user_id, item_name):
     inventory = Inventory.query.filter_by(item_name=item_name, user_id=user_id).first()
     if inventory and user:
         db.session.delete(inventory)
-        return db.session.commit()
+        db.session.commit()
+        return inventory
     return None
 
 # ensure that the inventory units is converted to the same unit before comparing
