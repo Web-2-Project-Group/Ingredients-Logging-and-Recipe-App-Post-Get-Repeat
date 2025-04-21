@@ -7,5 +7,5 @@ daily_recipe_views = Blueprint('daily_recipe_views', __name__, template_folder='
 @daily_recipe_views.route('/daily-recipes')
 @jwt_required()
 def daily_recipes_page():
-    dailyrecipes = User.query.filter_by(id=current_user.id).first()
+    dailyrecipes = produce_new_daily_recipes()
     return render_template('dailyrecipe.html', dailyrecipes=dailyrecipes)
