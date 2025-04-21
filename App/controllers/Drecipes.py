@@ -18,10 +18,3 @@ def get_daily_recipes():
   recipes = Drecipes.query.all()
   return recipes    
 
-#schedule.every().day.at("00:00").do(get_new_daily_recipe)
-schedule.every(5).seconds.do(produce_new_daily_recipes)
-
-while True:
-  schedule.run_pending()
-  time.sleep(1)
-  #time.sleep(60)
