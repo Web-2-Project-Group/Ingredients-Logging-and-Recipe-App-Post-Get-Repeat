@@ -1,47 +1,55 @@
 {% extends "layout.html" %}
-{% block title %}{% endblock %}
-{% block page %}{% endblock %}
+{% block title %}Home{% endblock %}
+{% block page %}Home{% endblock %}
 
 {% block link%}
-<nav style="background-color: orangered; border: none; margin: 0; padding: 10px 5%;  overflow: hidden;" >
-    <div class="nav-wrapper" style="background-color: darkred; border-radius: 50px; padding: 10px 20px; display: flex; align-items: center; justify-content: space-between">
+<nav style="background-color: orangered; border: none; margin: 0; padding: 10px 5%; overflow: visible;">
+    <div class="nav-wrapper" style="background-color: darkred; border-radius: 50px; padding: 10px 20px; display: flex; align-items: center; justify-content: space-between;">
         <div class="left">
-            <input type="text" placeholder="Search.." style="border: none; border-radius: 50px; background-color: orangered;">
+            <input type="text" placeholder="Search.." style="border: none; border-radius: 50px; background-color: orangered; padding: 5px 15px; color: white;">
         </div>
         <ul id="nav-mobile" class="right hide-on-med-and-down" style="display: flex; align-items: center;">
-            <ul id="nav-mobile" class="right hide-on-med-and-down" style="display: flex; align-items: center;">
-                <li style="margin-left: 15px;"><a href="/daily-recipes">Daily Recipes</a></li>
-                <li style="margin-left: 15px;"><a href="/my-recipes">Recipes</a></li>
-                <li style="margin-left: 15px;"><a href="/my-ingredients">My Ingredients</a></li>
-                <li style="margin-left: 15px;"><a href="/login" style="background-color: orangered; margin-top: 25px; margin-bottom: 25px; border-radius: 50px;">Login</a></li>
-                <li style="margin-left: 15px;">{{current_user}}</li>
-            </ul>
+            <li style="margin-left: 15px;"><a href="/daily-recipes">Daily Recipes</a></li>
+            <li style="margin-left: 15px;"><a href="/my-recipes">Recipes</a></li>
+            <li style="margin-left: 15px;"><a href="/my-ingredients">My Ingredients</a></li>
+            <li style="margin-left: 15px;">
+                <a href="/login" style="background-color: #e74c3c; color: white; padding: 10px 25px; border-radius: 25px; text-decoration: none; font-weight: bold; font-size: 1rem; transition: background-color 0.3s ease;">
+                    Login
+                </a>
+            </li>
+            <li style="margin-left: 15px;">{{current_user}}</li>
         </ul>
     </div>
 </nav>
 {% endblock %}
 
-
 {% block content %}
 <style>
+/* General Layout */
 .row {
     display: flex;
     flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+    padding: 20px;
 }
 
 .col {
     display: flex;
     flex-direction: column;
+    flex: 0 0 calc(33.33% - 20px);
+    max-width: calc(33.33% - 20px);
 }
 
+/* Card Styles */
 .card {
     display: flex;
     flex-direction: column;
-    flex-grow: 1;
-    width: 100%;
     border-radius: 15px;
     overflow: hidden;
-    background-color: orangered;
+    background-color: #f8d7da; /* Light pinkish-red for the card background */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    /* Removed hover effects */
 }
 
 .card-image {
@@ -51,6 +59,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    background-color: #f5b7b1; /* Slightly darker pinkish-red for contrast */
 }
 
 .card-image img {
@@ -60,39 +69,84 @@
 }
 
 .card-content {
-    flex-grow: 1;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
 
+.card-title a {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #2c3e50;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.card-title a:hover {
+    color: #e74c3c;
+}
+
+.card-content p {
+    font-size: 0.9rem;
+    color: #7f8c8d;
+    line-height: 1.4;
+}
+
+/* Recipe Info */
 .recipe-info {
-    background-color: orangered;
-    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #e74c3c; /* Bold red for the footer */
+    color: #fff; /* White text for contrast */
+    padding: 10px 15px;
+    font-size: 0.9rem;
+    border-top: 1px solid #bdc3c7;
+}
+
+.recipe-info img {
+    width: 20px;
+    height: 20px;
+    margin-right: 5px;
+}
+
+/* Updated Background Color */
+main {
+    background-color: #ffe6e6; /* Light pinkish-red to complement the red tones */
+    padding: 20px;
 }
 </style>
 
-
-<main style=" background-color: orangered; padding:none;">
-    <div style="display: flex; justify-content: space-between; align-items: center; padding: 0 20px; margin-bottom: 20px;">
-        <h3 style="margin: 0;">Home</h3>
-</div>
+<main>
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+        <h3 style="margin: 0; color: #2c3e50;">Home</h3>
+    </div>
 
     <div class="row">
-      {% for recipe in recipes %}
-      <div class="col s12 m6 l3">
-        <div class="card">
-          <div class="card-image">
-        <img src="{{recipe.image}}">
-          </div>
-          <div class="card-content">
-            <span  class="card-title" ><a href="/recipes/{{recipe.recipe_id}}" style="color: white;">{{recipe.title}}</a></span>
-            <p>{{recipe.description}}</p>
-          </div>
-          <div class="recipe-info" style="display: flex; align-items: center; gap: 5px;">
-            <img src="https://tse2.mm.bing.net/th?id=OIP.eaj12PtvZKg3RDD6XDmjVAHaHd&pid=Api&P=0&h=220" alt="Time Icon" style="width: 20px; height: 20px;">
-            <span class="time">{{recipe.cook_time}}</span>
-          </div>
+        {% for recipe in recipes %}
+        <div class="col">
+            <div class="card">
+                <div class="card-image">
+                    {% if recipe.image %}
+                    <img src="{{ recipe.image }}" alt="{{ recipe.title }}">
+                    {% else %}
+                    <img src="https://via.placeholder.com/400x250?text=No+Image" alt="No image available">
+                    {% endif %}
+                </div>
+                <div class="card-content">
+                    <span class="card-title"><a href="/recipes/{{recipe.recipe_id}}">{{ recipe.title }}</a></span>
+                    <p>{{ recipe.description|truncate(100) }}</p>
+                </div>
+                <div class="recipe-info">
+                    <div>
+                        <img src="https://tse2.mm.bing.net/th?id=OIP.eaj12PtvZKg3RDD6XDmjVAHaHd&pid=Api&P=0&h=220" alt="Time Icon">
+                        <span>{{ recipe.cook_time }}</span>
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
-      {% endfor %}
-    </div>    
+        {% endfor %}
+    </div>
 </main>
 {% endblock %}

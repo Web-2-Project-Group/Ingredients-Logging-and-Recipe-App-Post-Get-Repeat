@@ -1,110 +1,144 @@
 {% extends "layout.html" %}
-
 {% block title %}Search Results{% endblock %}
+{% block page %}Search Results{% endblock %}
 
 {% block content %}
-<div class="search-results">
-    <h2>Search Results for "{{ query }}"</h2>
+<style>
+/* General Layout */
+.row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+    padding: 20px;
+}
+
+.col {
+    display: flex;
+    flex-direction: column;
+    flex: 0 0 calc(33.33% - 20px);
+    max-width: calc(33.33% - 20px);
+}
+
+/* Card Styles */
+.card {
+    display: flex;
+    flex-direction: column;
+    border-radius: 15px;
+    overflow: hidden;
+    background-color: #f8d7da;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.card-image {
+    width: 100%;
+    height: 200px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f5b7b1;
+}
+
+.card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.card-content {
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.card-title a {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #2c3e50;
+    text-decoration: none;
+}
+
+.recipe-info {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #e74c3c;
+    color: #fff;
+    padding: 10px 15px;
+    font-size: 0.9rem;
+    border-top: 1px solid #bdc3c7;
+}
+
+.section-title {
+    font-size: 1.8rem;
+    color: #2c3e50;
+    margin: 30px 0 15px;
+    border-bottom: 2px solid #f8d7da;
+    padding-bottom: 10px;
+}
+
+/* Updated Background Color */
+main {
+    background-color: #ffe6e6;
+    padding: 20px;
+}
+</style>
+
+<main>
+    <h2 style="color: #2c3e50;">Search Results for "{{ query }}"</h2>
     
     {% if recipes %}
-    <div class="recipe-grid">
+    <div class="section-title">Recipes</div>
+    <div class="row">
         {% for recipe in recipes %}
-        <div class="recipe-card" onclick="window.location='{{ url_for('recipe_views.recipe_details_page', recipe_id=recipe.id) }}'">
-            <div class="recipe-image">
-                {% if recipe.image %}
-                <img src="{{ recipe.image }}" alt="{{ recipe.title }}">
-                {% else %}
-                <div class="no-image">No Image</div>
-                {% endif %}
-            </div>
-            <div class="recipe-info">
-                <h3>{{ recipe.title }}</h3>
-                <p class="description">{{ recipe.description|truncate(100) }}</p>
-                <div class="meta">
-                    <span class="ingredients">{{ recipe.get_ingredients()|length }} ingredients</span>
-                    <span class="time">{{ recipe.cook_time }}</span>
+        <div class="col">
+            <div class="card">
+                <div class="card-image">
+                    {% if recipe.image %}
+                    <img src="{{ recipe.image }}" alt="{{ recipe.title }}">
+                    {% else %}
+                    <img src="https://via.placeholder.com/400x250?text=No+Image" alt="No image available">
+                    {% endif %}
+                </div>
+                <div class="card-content">
+                    <span class="card-title"><a href="/recipes/{{recipe.recipe_id}}">{{recipe.title}}</a></span>
+                    <p>{{recipe.description|truncate(100)}}</p>
+                </div>
+                <div class="recipe-info">
+                    <div>
+                        <img src="https://tse2.mm.bing.net/th?id=OIP.eaj12PtvZKg3RDD6XDmjVAHaHd&pid=Api&P=0&h=220" alt="Time Icon">
+                        <span>{{recipe.cook_time}}</span>
+                    </div>
                 </div>
             </div>
         </div>
         {% endfor %}
     </div>
-    {% else %}
-    <p class="no-results">No recipes found matching "{{ query }}"</p>
     {% endif %}
-</div>
-
-<style>
-    .search-results {
-        padding: 20px;
-        max-width: 1200px;
-        margin: 0 auto;
-    }
     
-    .recipe-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-        gap: 20px;
-        margin-top: 20px;
-    }
+    {% if ingredients %}
+    <div class="section-title">Ingredients</div>
+    <div class="row">
+        {% for ingredient in ingredients %}
+        <div class="col">
+            <div class="card">
+                <div class="card-content">
+                    <span class="card-title">{{ ingredient.item_name }}</span>
+                    <p>Quantity: {{ ingredient.quantity }}</p>
+                    <p>Category: {{ ingredient.category }}</p>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
     
-    .recipe-card {
-        border: 1px solid #ddd;
-        border-radius: 8px;
-        overflow: hidden;
-        cursor: pointer;
-        transition: transform 0.2s;
-    }
-    
-    .recipe-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-    }
-    
-    .recipe-image {
-        height: 200px;
-        background-color: #f5f5f5;
-        overflow: hidden;
-    }
-    
-    .recipe-image img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-    }
-    
-    .no-image {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        height: 100%;
-        color: #777;
-    }
-    
-    .recipe-info {
-        padding: 15px;
-    }
-    
-    .recipe-info h3 {
-        margin: 0 0 10px 0;
-        color: #333;
-    }
-    
-    .description {
-        color: #666;
-        margin-bottom: 15px;
-    }
-    
-    .meta {
-        display: flex;
-        justify-content: space-between;
-        color: #888;
-        font-size: 0.9em;
-    }
-    
-    .no-results {
-        text-align: center;
-        padding: 40px;
-        color: #666;
-    }
-</style>
+    {% if not recipes and not ingredients %}
+    <p style="text-align: center; font-size: 1.2rem; color: #7f8c8d; margin-top: 40px;">
+        No results found for "{{ query }}". Try another search term.
+    </p>
+    {% endif %}
+</main>
 {% endblock %}
