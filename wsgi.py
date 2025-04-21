@@ -19,11 +19,11 @@ def initialize():
         db.drop_all()
         db.create_all()
         
-        # Create initial user 'bob'
+        # Create initial user 'bob' - FIXED: provide both username and password
         bob = User.query.filter_by(username="bob").first()
         if not bob:
-            bob = User(username="bob")
-            bob.set_password("bobpass")
+            # Use the constructor with both required parameters
+            bob = User(username="bob", password="bobpass")
             db.session.add(bob)
             db.session.commit()
             print("Initial user 'bob' created with password 'bobpass'")
