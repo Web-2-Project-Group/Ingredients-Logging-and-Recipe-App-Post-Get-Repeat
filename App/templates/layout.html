@@ -128,13 +128,12 @@
   </head>
   <body>
     <nav>
-      <form class="search-box" method="GET" action="{{ url_for('recipe_views.search_recipes') }}">
+      <div class="search-box">
         <img src="{{ url_for('static', filename='images/Search.png') }}" alt="Search Icon">
-        <input type="text" name="q" placeholder="Search recipes..." value="{{ request.args.get('q', '') }}">
-        <button type="submit" style="display: none;"></button> <!-- Hidden submit button for better UX -->
-      </form>
+        <input type="text" placeholder="Search...">
+      </div>
       <div class="nav-links">
-        <a href="/" class="nav-item">Home</a>
+        <a href="/home" class="nav-item">Home</a>
         <a href="/daily-recipes" class="nav-item">Daily Recipes</a>
         <a href="/my-recipes" class="nav-item">My Recipes</a>
         <a href="/my-ingredients" class="nav-item">My Ingredients</a>
