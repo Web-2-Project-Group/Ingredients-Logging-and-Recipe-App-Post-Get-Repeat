@@ -261,6 +261,7 @@
 <script>
   document.addEventListener('DOMContentLoaded', function() {
     let ingredientCounter = 1;
+<<<<<<< HEAD
     
     // Add ingredient row
     document.getElementById('addIngredient').addEventListener('click', function() {
@@ -315,5 +316,35 @@
       button.closest('.ingredient-row').remove();
     }
   }
+=======
+ 
+    // Add ingredient row
+    document.getElementById('addIngredient').addEventListener('click', function() {
+      const container = document.getElementById('ingredientsContainer');
+      const newRow = container.querySelector('.ingredient-row').cloneNode(true);
+     
+      // Update input names with the new index
+      const inputs = newRow.querySelectorAll('input, select');
+      inputs.forEach(input => {
+        const name = input.name.replace(/\d+/, ingredientCounter);
+        input.name = name;
+        input.value = '';  // Reset the value
+      });
+     
+      container.appendChild(newRow);
+      ingredientCounter++;
+    });
+ 
+    // Remove ingredient row
+    document.addEventListener('click', function(e) {
+      if(e.target.classList.contains('remove-ingredient')) {
+        const rows = document.querySelectorAll('.ingredient-row');
+        if (rows.length > 1) {  // Ensure at least one row is present
+          e.target.closest('.ingredient-row').remove();
+        }
+      }
+    });
+  });
+>>>>>>> ad1fcf3ccf644a023cec59c72775fdf17e89043d
 </script>
 {% endblock %}
