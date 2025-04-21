@@ -157,218 +157,35 @@
 
 <script>
   document.addEventListener('DOMContentLoaded', function() {
-      console.log('[START] Form handler initialization');
-  
-      // 1. Get form elements with paranoid-level checking
-      const form = document.getElementById('recipeForm');
-      if (!form) {
-          console.error('CRITICAL ERROR: Form element not found!');
-          alert('System error: Cannot find form. Please reload the page.');
-          return;
+    let ingredientCounter = 1;
+ 
+    // Add ingredient row
+    document.getElementById('addIngredient').addEventListener('click', function() {
+      const container = document.getElementById('ingredientsContainer');
+      const newRow = container.firstElementChild.cloneNode(true);
+     
+      // Update input names with the new index
+      const inputs = newRow.querySelectorAll('input, select');
+      inputs.forEach(input => {
+        const name = input.name.replace(/\d+/, ingredientCounter);
+        input.name = name;
+        if (input.type !== 'hidden') input.value = '';  // Reset the value of inputs
+      });
+     
+      container.appendChild(newRow);
+      ingredientCounter++;
+    });
+ 
+    // Remove ingredient row
+    document.addEventListener('click', function(e) {
+      if(e.target.classList.contains('remove-ingredient')) {
+        const rows = document.querySelectorAll('.ingredient-row');
+        if (rows.length > 1) {  // Ensure at least one row is present before removing
+          e.target.closest('.ingredient-row').remove();
+          ingredientCounter--;  // Decrease counter when row is removed
+        }
       }
-  
-      console.log('[OK] Form element found:', form);
-  
-      // 2. Set up ingredient management
-      let ingredientCounter = document.querySelectorAll('.ingredient-row').length;
-      console.log(`[INGREDIENTS] Found ${ingredientCounter} existing ingredients`);
-  
-      // 3. Add ingredient with bulletproof cloning
-      function addIngredient() {
-          console.log('[ACTION] Attempting to add ingredient');
-          
-          try {
-              const template = document.querySelector('.ingredient-row');
-              if (!template) throw new Error('Template not found');
-              
-              const newRow = template.cloneNode(true);
-              const newIndex = ingredientCounter++;
-              
-              // Update ALL attributes that might need new indexes
-              newRow.querySelectorAll('[name], [id], [for]').forEach(el => {
-                  if (el.name) el.name = el.name.replace(/\d+$/, newIndex);
-                  if (el.id) el.id = el.id.replace(/\d+$/, newIndex);
-                  if (el.htmlFor) el.htmlFor = el.htmlFor.replace(/\d+$/, newIndex);
-              });
-              
-              // Clear all values in the new row
-              newRow.querySelectorAll('input, select, textarea').forEach(el => {
-                  if (el.type !== 'submit') {
-                      el.value = '';
-                      el.checked = false;
-                      el.selectedIndex = 0;
-                  }
-              });
-              
-              // Remove validation attributes
-              newRow.querySelectorAll('[required], [pattern], [min], [max]').forEach(el => {
-                  el.removeAttribute('required');
-                  el.removeAttribute('pattern');
-                  el.removeAttribute('min');
-                  el.removeAttribute('max');
-              });
-              
-              document.getElementById('ingredientsContainer').appendChild(newRow);
-              console.log(`[SUCCESS] Added ingredient row ${newIndex}`);
-          } catch (error) {
-              console.error('[ERROR] Failed to add ingredient:', error);
-              alert('Failed to add ingredient. Please try again.');
-          }
-      }
-  
-      // 4. Nuclear-grade form validation
-      function validateForm() {
-          console.log('[VALIDATION] Starting validation');
-          let isValid = true;
-          
-          // Validate title
-          const titleInput = form.querySelector('[name="title"]');
-          if (!titleInput?.value?.trim()) {
-              console.warn('[VALIDATION] Title is required');
-              titleInput?.focus();
-              alert('Recipe title is required');
-              return false;
-          }
-  
-          // Validate ingredients
-          const ingredientRows = Array.from(document.querySelectorAll('.ingredient-row'));
-          let validIngredients = 0;
-          
-          for (const [index, row] of ingredientRows.entries()) {
-              const nameInput = row.querySelector('[name^="ingredient_name_"]');
-              const name = nameInput?.value?.trim();
-              
-              if (name) {
-                  const categorySelect = row.querySelector('[name^="ingredient_category_"]');
-                  const quantityInput = row.querySelector('[name^="ingredient_quantity_"]');
-                  
-                  if (!categorySelect?.value) {
-                      console.warn(`[VALIDATION] Row ${index}: Category required for "${name}"`);
-                      categorySelect?.focus();
-                      alert(`Please select a category for "${name}"`);
-                      return false;
-                  }
-                  
-                  if (!quantityInput?.value?.trim()) {
-                      console.warn(`[VALIDATION] Row ${index}: Quantity required for "${name}"`);
-                      quantityInput?.focus();
-                      alert(`Please enter quantity for "${name}"`);
-                      return false;
-                  }
-                  
-                  validIngredients++;
-              }
-          }
-          
-          if (validIngredients === 0) {
-              console.warn('[VALIDATION] At least one ingredient required');
-              document.querySelector('[name^="ingredient_name_"]')?.focus();
-              alert('At least one complete ingredient is required');
-              return false;
-          }
-          
-          console.log('[VALIDATION] Form is valid');
-          return true;
-      }
-  
-      // 5. Form submission with military-grade error handling
-      async function handleSubmit(e) {
-          console.log('[SUBMIT] Form submission started');
-          e.preventDefault();
-          
-          // Disable submit button to prevent double-submission
-          const submitBtn = form.querySelector('button[type="submit"]');
-          submitBtn.disabled = true;
-          submitBtn.textContent = 'Submitting...';
-          
-          try {
-              if (!validateForm()) {
-                  console.log('[SUBMIT] Validation failed - aborting');
-                  return;
-              }
-              
-              // Prepare form data
-              const formData = new FormData(form);
-              console.log('[DATA] Form contents:', Object.fromEntries(formData.entries()));
-              
-              // Send request
-              console.log('[NETWORK] Sending to:', form.action);
-              const response = await fetch(form.action, {
-                  method: 'POST',
-                  body: formData,
-                  headers: {
-                      'Accept': 'application/json',
-                      'X-Requested-With': 'XMLHttpRequest'
-                  }
-              });
-              
-              console.log('[NETWORK] Response status:', response.status);
-              
-              // Handle response
-              if (response.redirected) {
-                  console.log('[REDIRECT] Redirecting to:', response.url);
-                  window.location.href = response.url;
-                  return;
-              }
-              
-              const contentType = response.headers.get('content-type');
-              if (contentType?.includes('application/json')) {
-                  const data = await response.json();
-                  console.log('[RESPONSE] JSON data:', data);
-                  if (data.error) {
-                      alert(data.error);
-                  } else if (data.success) {
-                      window.location.href = data.redirect || '/';
-                  }
-              } else {
-                  const text = await response.text();
-                  console.warn('[RESPONSE] Non-JSON response:', text);
-                  alert('Server response was not in expected format');
-              }
-          } catch (error) {
-              console.error('[ERROR] Submission failed:', error);
-              alert('Submission failed. Please check your connection and try again.');
-          } finally {
-              submitBtn.disabled = false;
-              submitBtn.textContent = 'ADD RECIPE';
-              console.log('[SUBMIT] Submission process completed');
-          }
-      }
-  
-      // 6. Event listeners with fallback
-      function setupEventListeners() {
-          // Add ingredient button
-          const addBtn = document.getElementById('addIngredient');
-          if (addBtn) {
-              addBtn.addEventListener('click', addIngredient);
-              console.log('[EVENTS] Added ingredient button listener');
-          } else {
-              console.warn('[WARNING] Add ingredient button not found');
-          }
-          
-          // Form submission
-          form.addEventListener('submit', handleSubmit);
-          console.log('[EVENTS] Added form submit listener');
-          
-          // Remove ingredients
-          const container = document.getElementById('ingredientsContainer');
-          if (container) {
-              container.addEventListener('click', function(e) {
-                  if (e.target.classList.contains('remove-ingredient')) {
-                      e.preventDefault();
-                      const rows = document.querySelectorAll('.ingredient-row');
-                      if (rows.length > 1) {
-                          e.target.closest('.ingredient-row').remove();
-                          console.log('[ACTION] Removed ingredient row');
-                      }
-                  }
-              });
-          }
-      }
-  
-      // Initialize everything
-      setupEventListeners();
-      console.log('[READY] Form handler is fully operational');
+    });
   });
   </script>
 {% endblock %}
