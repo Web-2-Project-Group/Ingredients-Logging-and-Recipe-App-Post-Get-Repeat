@@ -1,6 +1,6 @@
 {% extends "layout.html" %}
-{% block title %}{% endblock %}
-{% block page %}{% endblock %}
+{% block title %}My Ingredients{% endblock %}
+{% block page %}My Ingredients{% endblock %}
 
 {% block link%}
 <nav style="background-color: orangered; border: none; margin: 0; padding: 10px 5%;  overflow: hidden;" >
@@ -62,28 +62,52 @@
         margin-top: auto;
         align-self: flex-end;
     }
+
+    .empty-message {
+        text-align: center;
+        padding: 50px;
+        font-size: 1.5rem;
+    }
 </style>
 
 
-<main style=" background-color: orangered; padding:none;">
-    <div style="display: flex; justify-content: space-between; align-items: center; padding: 0 20px; margin-bottom: 20px;">
-        <h3 style="margin: 0;">My Ingredients:</h3>
+<main style="background-color: orangered; padding: 20px;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+        <h3>My Ingredients</h3>
+        <button class="addbutton" id="add-ingredient-btn">Add New Ingredient</button>
     </div>
 
-    <div class="row" style="padding-left: 18%;" >
-        {% for ingredient in user.inventory %}
-        <div class="col s12 m6 l6">
+    <div class="row">
+        {% for ingredient in user %}
+        <div class="col s12 m6 l4">
             <div class="card">
                 <div class="cardcontent">
                     <span class="card-title">{{ingredient.item_name}}</span>
                     <button class="add">Add</button>
                 </div>
-                <button class="delete">Delete</button>
+                <div class="cardcontent">
+                    <span>Quantity: {{ingredient.quantity}}</span>
+                    <span>Category: {{ingredient.category}}</span>
+                </div>
+                <div class="cardcontent" style="justify-content: flex-end;">
+                    <button class="delete">Delete</button>
+                </div>
             </div>
         </div>
         {% endfor %}
     </div>
 </main>
 
-
+<script>
+    // Add hover animation effects
+    document.addEventListener('DOMContentLoaded', function() {
+        // Pulsing effect for empty ingredient list
+        if (document.querySelectorAll('.card').length === 0) {
+            const emptyMsg = document.createElement('div');
+            emptyMsg.className = 'empty-message';
+            emptyMsg.textContent = 'No ingredients yet. Add some!';
+            document.querySelector('.row').appendChild(emptyMsg);
+        }
+    });
+</script>
 {% endblock %}

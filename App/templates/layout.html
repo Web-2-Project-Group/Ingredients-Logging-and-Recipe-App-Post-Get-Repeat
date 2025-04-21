@@ -130,7 +130,7 @@
     <nav>
       <div class="search-box">
         <img src="{{ url_for('static', filename='images/Search.png') }}" alt="Search Icon">
-        <input type="text" placeholder="Search...">
+        <input type="text" placeholder="Search recipes..." name="search_query">
       </div>
       <div class="nav-links">
         <a href="/home" class="nav-item">Home</a>
@@ -151,15 +151,36 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
     <script>
-      M.AutoInit();
-
-      {% with messages = get_flashed_messages() %}
-        {% if messages %}
+      document.addEventListener('DOMContentLoaded', function() {
+        // Initialize Materialize components
+        M.AutoInit();
+        
+        // Flash messages with animation
+        {% with messages = get_flashed_messages() %}
+          {% if messages %}
             {% for message in messages %}
-            M.toast({html: '{{message}}'})
+              M.toast({html: '{{message}}', classes: 'rounded', displayLength: 4000});
             {% endfor %}
-        {% endif %}
-      {% endwith %}
+          {% endif %}
+        {% endwith %}
+        
+        // Search form functionality
+        document.querySelector('.search-box').addEventListener('submit', function(e) {
+          e.preventDefault();
+          let query = this.querySelector('input').value.trim();
+          if (query) {
+            window.location.href = '/search?q=' + encodeURIComponent(query);
+          }
+        });
+        
+        // Add active class to current nav link
+        const currentPath = window.location.pathname;
+        document.querySelectorAll('.nav-item').forEach(link => {
+          if (link.getAttribute('href') === currentPath) {
+            link.classList.add('active');
+          }
+        });
+      });
     </script>
   </body>
 </html>
