@@ -14,6 +14,13 @@ from App.controllers import (
 
 recipe_views = Blueprint('recipe_views', __name__, template_folder='../templates')
 
+@recipe_views.route('/home', methods=['GET'])
+@jwt_required()
+def home_page():
+    recipes= Recipe.query.all()
+    return render_template('home.html', recipes=recipes)
+
+
 # Render form to add a new recipe
 @recipe_views.route('/recipes/add', methods=['GET'])
 def add_recipe_page():
