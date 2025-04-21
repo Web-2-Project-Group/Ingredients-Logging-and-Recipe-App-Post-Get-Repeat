@@ -12,22 +12,49 @@
 
 {% block content %}
 <style>
-    .card { border-radius: 15px; overflow: hidden; width: 350px; }
-    .card-content { background-color: orangered; position: relative; border: none; }
-    .recipe-info {
-        position: relative;
-        display: flex;
-        align-items: center;
-        background-color: orangered;
-        padding: 10px;
-    }
-    .recipe-info img {
-        width: 20px;
-        height: 20px;
-        object-fit: contain;
-        border-radius: 50%;
-        margin-right: 5px;
-    }
+.row {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.col {
+    display: flex;
+    flex-direction: column;
+}
+
+.card {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    width: 100%;
+    border-radius: 15px;
+    overflow: hidden;
+    background-color: orangered;
+}
+
+.card-image {
+    width: 100%;
+    height: 200px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.card-content {
+    flex-grow: 1;
+}
+
+.recipe-info {
+    background-color: orangered;
+    padding: 10px;
+}
 </style>
 
 <main style="background-color: orangered; padding: 20px;">
@@ -45,22 +72,18 @@
         {% for recipe in recipes %}
         <div class="col s4 m4 l4">
             <div class="card">
-                <a href="{{ url_for('recipe_views.recipe_details_page', recipe_id=recipe.id) }}">
-                    <div class="card-image">
-                        {% for recipe in recipe.image%}
-                        <img src="{{ recipe  }}">
-                        {% endfor %}
-                    </div>
-                    <div class="card-content">
-                        <span class="card-title">{{ recipe.title }}</span>
-                        <p>{{ recipe.instructions[:100] }}...</p>
-                    </div>
-                </a>
-                <div class="recipe-info">
-                    <img src="https://static.vecteezy.com/system/resources/previews/004/397/047/original/clock-icon-clock-time-symbol-flat-style-design-web-site-icon-logo-app-ui-illustration-eps10-free-vector.jpg">
-                    <span class="time">{{ recipe.number_of_ingredients }} ingredients</span>
+                <div class="card-image">
+              <img src="{{recipe.image}}">
                 </div>
-            </div>
+                <div class="card-content">
+                  <span  class="card-title" ><a href="/recipes/{{recipe.recipe_id}}" style="color: white;">{{recipe.title}}</a></span>
+                  <p>{{recipe.description}}</p>
+                </div>
+                <div class="recipe-info" style="display: flex; align-items: center; gap: 5px;">
+                    <img src="https://tse2.mm.bing.net/th?id=OIP.eaj12PtvZKg3RDD6XDmjVAHaHd&pid=Api&P=0&h=220" alt="Time Icon" style="width: 20px; height: 20px;">
+                    <span class="time">{{recipe.cook_time}}</span>
+                  </div>
+              </div>
         </div>
         {% endfor %}
     </div>
