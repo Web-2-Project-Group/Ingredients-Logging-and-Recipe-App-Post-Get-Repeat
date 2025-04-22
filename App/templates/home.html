@@ -1,0 +1,39 @@
+{% extends "layout.html" %}
+{% block title %}{% endblock %}
+{% block page %}{% endblock %}
+
+
+
+{% block content %}
+
+
+
+<main>
+    <div style="display: flex; justify-content: space-between; align-items: center; padding: 20px 20px;">
+        <h3 style="margin: 0;">Home</h3>
+</div>
+
+    <div class="row">
+      {% for recipe in recipes %}
+      <div class="col s12 m6 l3">
+        
+        <a href = "/recipes/{{recipe.id}}">   
+          <div class="card" >
+            <div class="card-image">
+          <img src="{{recipe.image}}">
+            </div>
+              <div class="card-content">
+            <span  class="card-title" ><a href="/recipes/{{recipe.id}}" style="color: white;">{{recipe.title}}</a></span> <hr>
+            <p>{{recipe.description}}</p>
+          </div>
+          <div class="recipe-info" style="display: flex; align-items: center; gap: 5px;">
+            <img src="https://tse2.mm.bing.net/th?id=OIP.eaj12PtvZKg3RDD6XDmjVAHaHd&pid=Api&P=0&h=220" alt="Time Icon">
+            <span class="time">{{recipe.cook_time}}</span>
+          </div>
+          </div>
+        </a>
+      </div>
+      {% endfor %}
+    </div>    
+</main>
+{% endblock %}

@@ -5,7 +5,9 @@ from flask_jwt_extended import jwt_required, current_user, unset_jwt_cookies, se
 from.index import index_views
 
 from App.controllers import (
-    login
+    login,
+    signup,
+    get_all_users,
 )
 
 auth_views = Blueprint('auth_views', __name__, template_folder='../templates')
@@ -25,7 +27,12 @@ def get_user_page():
 @jwt_required()
 def identify_page():
     return render_template('message.html', title="Identify", message=f"You are logged in as {current_user.id} - {current_user.username}")
-    
+
+
+@auth_views.route('/signup', methods=['GET'])
+def signup_page():
+    return render_template("signup.html")
+ 
 
 @auth_views.route('/login', methods=['POST'])
 def login_action():
@@ -37,6 +44,21 @@ def login_action():
     else:
         flash('Login Successful')
         set_access_cookies(response, token) 
+    return response
+
+@auth_views.route('/signup', methods=['POST'])
+def signup_action():
+    data = request.form
+    status = signup(data['username'], data['password'])
+    response = redirect(request.referrer)
+    if not status:
+        flash('Signup failed, username taken!'), 401
+    else:
+        token = login(data['username'], data['password'])
+        flash('Signup Successful')
+        set_access_cookies(response, token) 
+        return redirect(url_for('recipe_views.home_page'))
+
     return response
 
 @auth_views.route('/logout', methods=['GET'])

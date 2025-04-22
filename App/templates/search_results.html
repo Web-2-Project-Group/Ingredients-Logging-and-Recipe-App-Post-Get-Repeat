@@ -1,0 +1,103 @@
+{% extends "layout.html" %}
+
+{% block title %}Search Results{% endblock %}
+
+{% block content %}
+<div class="container">
+  <h1 class="center-align">Search Results for "{{ query }}"</h1>
+  
+  {% if recipes %}
+    <div class="row" style="justify-content: center; align-items: center; min-height: 60vh;"> <!-- Center-align cards -->
+      {% for recipe in recipes %}
+        <div class="col s12 m6 l4" style="display: flex; justify-content: center;"> <!-- Center single card -->
+          <div class="card">
+            <div class="card-image">
+              {% if recipe.image %}
+                <img src="{{ recipe.image }}" alt="{{ recipe.title }}">
+              {% else %}
+                <img src="{{ url_for('static', filename='images/default-recipe.jpg') }}" alt="{{ recipe.title }}">
+              {% endif %}
+              <a href="{{ url_for('recipe_views.recipe_details_page', recipe_id=recipe.id) }}" class="btn-floating halfway-fab waves-effect waves-light red">
+                <i class="material-icons">visibility</i>
+              </a>
+            </div>
+            <div class="card-content burgundy-bg">
+              <span class="card-title white-text">{{ recipe.title }}</span>
+              <p class="white-text">{{ recipe.description }}</p>
+              <p class="white-text cook-time">
+                <i class="material-icons tiny">schedule</i> {{ recipe.cook_time or 'Not specified' }}
+              </p>
+            </div>
+            <div class="card-action burgundy-bg">
+              <a href="{{ url_for('recipe_views.recipe_details_page', recipe_id=recipe.id) }}" class="white-text view-recipe-link">VIEW RECIPE</a>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <div class="center-align">
+      <p>No recipes found matching "{{ query }}".</p>
+      <a href="{{ url_for('recipe_views.home_page') }}" class="btn">Back to Home</a>
+    </div>
+  {% endif %}
+</div>
+
+<style>
+  .row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center; /* Center-align cards horizontally */
+    align-items: center; /* Center-align cards vertically */
+    min-height: 60vh; /* Ensure the row takes up enough vertical space */
+  }
+
+  .col {
+    display: flex;
+    justify-content: center; /* Center single card horizontally */
+  }
+
+  .card {
+    width: 100%; /* Ensure consistent card width */
+    max-width: 300px; /* Match the "My Recipes" page */
+    margin: 10px; /* Add spacing between cards */
+  }
+
+  .burgundy-bg {
+    background-color: #8B181A !important; /* Dark burgundy/maroon color */
+    color: white !important;
+  }
+
+  .white-text {
+    color: white !important;
+  }
+
+  .cook-time {
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+  }
+
+  .cook-time i {
+    margin-right: 5px;
+  }
+
+  .view-recipe-link {
+    font-weight: bold;
+    text-transform: uppercase;
+  }
+
+  .card .card-content {
+    padding: 16px !important;
+  }
+
+  .card .card-title {
+    font-weight: bold !important;
+    margin-bottom: 10px !important;
+  }
+
+  .card p {
+    margin: 0 0 8px 0 !important;
+  }
+</style>
+{% endblock %}
