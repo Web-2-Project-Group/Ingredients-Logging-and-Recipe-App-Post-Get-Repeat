@@ -165,15 +165,20 @@ def search():
     if not query:
         return redirect(url_for('main.home'))
         
-    # Search for recipes
+    # Search for recipes by exact name match (case-insensitive)
     recipes = Recipe.query.filter(
-        Recipe.title.ilike(f'%{query}%') | 
-        Recipe.description.ilike(f'%{query}%')
+        Recipe.title.ilike(query)  # Exact match, case-insensitive
     ).all()
     
-    # Search for ingredients
+    # If no exact matches found, try recipes that start with the query
+    if not recipes:
+        recipes = Recipe.query.filter(
+            Recipe.title.ilike(f'{query}%')  # Starts with query
+        ).all()
+    
+    # Search for ingredients by exact name match
     ingredients = Inventory.query.filter(
-        Inventory.item_name.ilike(f'%{query}%')
+        Inventory.item_name.ilike(query)
     ).all()
     
     return render_template('search_results.html', 
