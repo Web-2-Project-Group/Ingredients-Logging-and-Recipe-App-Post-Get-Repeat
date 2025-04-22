@@ -1,0 +1,60 @@
+{% extends "layout.html" %}
+{% block title %}My Ingredients{% endblock %}
+{% block page %}My Ingredients{% endblock %}
+
+
+{% block link%}
+
+<nav>
+    <div class="nav-wrapper">
+        <!-- Your nav content remains the same -->
+    </div>
+</nav>
+{% endblock %}
+
+{% block content %}
+
+
+
+<main>
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+        <h3>My Ingredients</h3>
+        <a href="{{ url_for('inventory_views.add_ingredients_page') }}" class="addbutton">
+            Add Ingredients
+        </a>    
+    </div>
+
+    <div class="row">
+        {% for ingredient in user %}
+        <div class="col s12 m6 l4">
+
+            <div class="card">
+                <div class="card-content">
+                    <span class="card-title">{{ingredient.item_name}}</span>
+                </div>
+                <div class="card-content">
+                    <span>Quantity: {{ingredient.quantity}}</span>
+                </div>
+                <div class="card-content">
+                    <span>Category: {{ingredient.category}}</span>
+                </div>
+                <div class="card-content" style="justify-content: flex-end;">
+                    <a class="delete" href="/my-ingredients/delete/{{ingredient.id}}">Delete</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</main>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        if (document.querySelectorAll('.card').length === 0) {
+            const emptyMsg = document.createElement('div');
+            emptyMsg.className = 'empty-message';
+            emptyMsg.textContent = 'No ingredients yet. Add some!';
+            document.querySelector('.row').appendChild(emptyMsg);
+        }
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,51 @@
+{% extends "layout.html" %}
+{% block title %}My Recipes{% endblock %}
+{% block page %}My Recipes{% endblock %}
+
+{% block link%}
+
+
+<nav>
+    <div class="nav-wrapper">
+        <!-- Your nav content remains the same -->
+    </div>
+</nav>
+{% endblock %}
+
+{% block content %}
+
+
+<main>
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+        <h3>My Recipes</h3>
+        <a href="{{ url_for('recipe_views.add_recipe_page') }}" class="addbutton">
+            Add Recipe
+        </a>
+    </div>
+
+    <div class="row">
+        <!-- Dynamic recipe cards -->
+        {% for recipe in recipes %}
+        <div class="col s12 m6 l4">
+            <div class="card">
+                <div class="card-image">
+                    {% if recipe.image %}
+                    <img src="{{ recipe.image }}" alt="{{ recipe.title }}">
+                    {% else %}
+                    <img src="https://via.placeholder.com/400x250?text=No+Image" alt="No image available">
+                    {% endif %}
+                </div>
+                <div class="card-content">
+                <span class="card-title"><a href="/recipes/{{recipe.id}}" style="color: white;">{{recipe.title}}</a></span>
+                <p>{{recipe.description}}</p>
+                </div>
+                <div class="recipe-info">
+                    <img src="https://tse2.mm.bing.net/th?id=OIP.eaj12PtvZKg3RDD6XDmjVAHaHd&pid=Api&P=0&h=220" alt="Time Icon" style="width: 20px; height: 20px;">
+                    <span class="time">{{recipe.cook_time}}</span>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</main>
+{% endblock %}

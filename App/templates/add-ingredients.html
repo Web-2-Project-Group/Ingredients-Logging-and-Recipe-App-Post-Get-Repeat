@@ -1,0 +1,104 @@
+{% extends "layout.html" %}
+
+{% block title %}Add Ingredient{% endblock %}
+{% block content %}
+<style>
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .ingredient-row {
+        flex-direction: column;
+        gap: 8px;
+    }
+    
+    .ingredient-type,
+    .ingredient-name,
+    .ingredient-measurement,
+    .ingredient-quantity
+    {
+        width: 100%;
+    }
+}
+</style>
+<div class="add-recipe-container">
+  <form method="POST" action="{{ url_for('inventory_views.add_ingredients_action') }}" enctype="multipart/form-data" id="ingredientForm">
+    <input type="hidden" name="user_id" value="{{ current_user.id }}">
+    
+    <div class="header-row">
+      <h1>Add Ingredients:</h1>
+      <button type="submit" class="submit-btn rectangle">Add Ingredients</button>
+    </div>
+
+    <div class="ingredient-form-container">
+      <!-- Ingredients Section -->
+      <div class="ingredients-section rectangle">
+        <h4>Ingredients:</h4>
+        <hr>
+        <div class="ingredient-controls" id="ingredientsContainer">
+          <!-- Template for one ingredient row -->
+          <div class="ingredient-row">
+            <div class="ingredient-type rectangle">
+              <select name="ingredient_category_0" class="hidden-select" required>
+                <option value="produce">Produce</option>
+                <option value="dairy">Dairy</option>
+                <option value="spices">Herbs/Spices</option>
+                <option value="meat">Meat</option>
+                <option value="pantry">Pantry</option>
+              </select>
+            </div>
+            <div class="ingredient-name rectangle">
+              <input type="text" name="ingredient_name_0" class="hidden-input" placeholder="Ingredient" required>
+            </div>
+            <div class="ingredient-quantity rectangle">
+                <input type="text" name="ingredient_quantity_0" class="hidden-input" placeholder="Quantity" >
+            </div>
+            <div class="ingredient-measurement rectangle">
+              <select name="ingredient_unit_0" class="hidden-select" required>
+                <option value="unit">unit</option>
+                <option value="cup">cup</option>
+                <option value="teaspoon">teaspoon</option>
+                <option value="Tablespoon">Tablespoon</option>
+                <option value="pound">pound</option>
+              </select>
+            </div>
+            <button type="button" class="remove-ingredient">-</button>
+          </div>
+        </div>
+        <button type="button" id="addIngredient" class="ellipse-btn">
+          <img src="{{ url_for('static', filename='images/plus-icon.png') }}" width="21" height="23" alt="Add ingredient">
+        </button>
+      </div>
+    </div>
+  </form>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  let ingredientCounter = 1;
+  
+  document.getElementById('addIngredient').addEventListener('click', function() {
+    const container = document.getElementById('ingredientsContainer');
+    const newRow = container.firstElementChild.cloneNode(true);
+    
+    const inputs = newRow.querySelectorAll('input, select');
+    inputs.forEach(input => {
+      const name = input.name.replace(/\d+/, ingredientCounter);
+      input.name = name;
+      if (input.type !== 'hidden') input.value = '';
+    });
+    
+    container.appendChild(newRow);
+    ingredientCounter++;
+  });
+
+  document.addEventListener('click', function(e) {
+    if(e.target.classList.contains('remove-ingredient')) {
+      const rows = document.querySelectorAll('.ingredient-row');
+      if(rows.length > 1) {
+        e.target.closest('.ingredient-row').remove();
+      }
+    }
+  });
+});
+</script>
+{% endblock %}

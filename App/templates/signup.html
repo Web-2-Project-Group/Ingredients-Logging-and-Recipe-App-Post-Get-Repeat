@@ -1,0 +1,84 @@
+{% extends "layout.html" %}
+{% block title %}Sign Up{% endblock %}
+{% block page %}Sign Up{% endblock %}
+
+{% block link%}
+<ul id="nav-mobile" class="right" style="background-color: orangered;">
+  <li><a href="/login">Login</a></li>
+</ul>
+{% endblock %}
+
+{% block content %}
+<style>
+  main {
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+    background-color: #9a2a2a;
+  }
+
+  .signup-form {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #9a2a2a;
+  }
+
+  .signup-card {
+    width: 100%;
+    max-width: 500px;
+    padding: 20px;
+    border-radius: 8px;
+    background-color: #551717;
+    border: none;
+  }
+
+  .input-field input {
+    padding: 8px;
+    width: 85%;
+    margin-bottom: 20px;
+
+  }
+
+  .card-action button {
+    background-color: darkred;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 20px;
+    cursor: pointer;
+    width: 100%;
+    margin-top: 20px;
+  }
+
+  .left-align {
+    text-align: left;
+    margin-top: 0;
+    color: white;
+  }
+</style>
+
+<main>
+  <div class="signup-form">
+    <div class="welcome">
+      <h2 style="text-align: center; color: white;">Welcome!</h2>
+    </div>
+    <form class="signup-card s12" id="loginForm" method="POST" action="/signup">
+      <h4 class="left-align">Sign Up!</h4>
+      <div class="input-field">
+        <input required placeholder="Username" class="validate" id="Username" name="username">
+        <label for="Username"></label>
+      </div>
+      <div class="input-field">
+        <input required type="password" placeholder="Password" class="validate" id="password" name="password">
+        <label for="Password"></label>
+      </div>
+      <div class="card-action">
+        <button type="submit">Sign up</button>
+      </div>
+    </form>
+  </div>
+</main>
+{% endblock %}

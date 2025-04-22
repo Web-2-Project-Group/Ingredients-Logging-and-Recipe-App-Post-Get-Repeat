@@ -1,5 +1,9 @@
 from werkzeug.security import check_password_hash, generate_password_hash
 from App.database import db
+from App.models.recipe import Recipe
+from App.models.inventory import Inventory
+
+
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -7,6 +11,7 @@ class User(db.Model):
     password = db.Column(db.String(120), nullable=False)
     recipe = db.relationship('Recipe', backref='user', lazy=True)
     inventory = db.relationship('Inventory', backref='user', lazy=True)
+    user_reviews = db.relationship('Review', backref='user', lazy=True)
     
     def __init__(self, username, password):
         self.username = username
@@ -30,8 +35,8 @@ class User(db.Model):
         new_recipe = Recipe(title=title, number_of_ingredients=number_of_ingredients, ingredients=ingredients, instructions=instructions, user_id=self.id)
         return new_recipe
 
-    def add_inventory(self, item_name, quantity):
-        new_inventory = Inventory(item_name=item_name, quantity=quantity, user_id=self.id)
+    def add_inventory(self, item_name, quantity, category):
+        new_inventory = Inventory(item_name=item_name, quantity=quantity, user_id=self.id, category=category)
         return new_inventory
 
     
