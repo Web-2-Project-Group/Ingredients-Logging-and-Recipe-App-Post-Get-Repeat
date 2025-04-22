@@ -36,4 +36,5 @@ class Recipe(db.Model):
     
     def get_instructions(self):
         """Return instructions as list"""
-        return self.instructions.split(';')
+        # Split by semicolons and filter out empty strings
+        return [instruction.strip() for instruction in self.instructions.split(';') if instruction.strip()]
