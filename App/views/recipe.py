@@ -161,20 +161,18 @@ def add_review(recipe_id):
             flash('Failed to add review. Please try again.', 'error')
 
 @recipe_views.route('/search', methods=['GET'])
-@jwt_required()
 def search_recipes():
     query = request.args.get('q', '').strip()
     
     if not query:
-        # Redirect to main recipes page
+        # Redirect to main recipes page if no query is provided
         return redirect(url_for('recipe_views.my_recipes_page'))  
     
-    # Search in both title and ingredients
-    recipes = Recipe.query.filter(
-        (Recipe.title.ilike(f'%{query}%')) | 
-        (Recipe.ingredients.ilike(f'%{query}%'))
-    ).all()
+    # Search only in the recipe title
+    recipes = Recipe.query.filter(Recipe.title.ilike(f'%{query}%')).all()
     
-    return render_template('search_results.html', 
-                         recipes=recipes, 
-                         query=query)
+    # If no results, flash a message
+    if not recipes:
+        flash(f'No recipes found for "{query}".', 'error')
+    
+    return render_template('search_results.html', recipes=recipes, query=query)

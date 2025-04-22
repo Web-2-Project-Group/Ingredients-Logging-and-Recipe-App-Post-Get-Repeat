@@ -107,8 +107,12 @@
   <body>
     <nav>
       <div class="search-box">
-        <input type="text" placeholder="Search recipes..." name="search_query">
-        <img src="{{ url_for('static', filename='images/Search.png') }}" class="search-icon">
+        <form id="search-form" action="/search" method="GET">
+          <input type="text" placeholder="Search recipes..." name="q">
+          <button type="submit" class="search-button">
+            <img src="{{ url_for('static', filename='images/Search.png') }}" class="search-icon">
+          </button>
+        </form>
       </div>
       <div class="nav-links">
         <a href="/" class="nav-item">Home</a>
@@ -135,8 +139,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
     <script>
       document.addEventListener('DOMContentLoaded', function() {
-        M.AutoInit();
-        
+        // Flash messages code
         {% with messages = get_flashed_messages() %}
           {% if messages %}
             {% for message in messages %}
@@ -145,13 +148,7 @@
           {% endif %}
         {% endwith %}
         
-        document.querySelector('.search-box').addEventListener('submit', function(e) {
-          e.preventDefault();
-          let query = this.querySelector('input').value.trim();
-          if (query) {
-            window.location.href = '/search?q=' + encodeURIComponent(query);
-          }
-        });
+        // No need for the search-box event listener as we're using a proper form now
         
         const currentPath = window.location.pathname;
         document.querySelectorAll('.nav-item').forEach(link => {

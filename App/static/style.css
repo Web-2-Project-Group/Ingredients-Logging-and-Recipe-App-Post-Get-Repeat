@@ -277,14 +277,26 @@ nav:hover {
 .search-box input {
   border: none;
   outline: none;
-  font-size: 1px;
+  font-size: 14px;
+  width: 100%;
   margin-left: 10px;
   color: white;
   background-color: transparent;
 }
 
-.search-box:focus-within input {
-  width: 180px;
+.search-box form {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.search-button {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
 }
 
 .search-icon {
